@@ -26,3 +26,95 @@ library(RColorBrewer)
 library(data.table)
 library(ggplot2)
 ```
+
+## Read in count matrix from comparing the 2022 _Pycnopodia helianthoides_ coelomocyte RNAseq libraries with the 2015 _Pycnopodia helianthoides_ transcriptome:  
+```{r}
+countmatrix <- read.delim("../analyses/Kallisto/2015Phel_transcriptome/kallisto-20231129_2015.isoform.counts.matrix", header = TRUE, sep = '\t')
+rownames(countmatrix) <- countmatrix$X
+countmatrix <- countmatrix[,-1]
+head(countmatrix)
+```
+29,476 obs, 32 variables
+
+Round integers up to whole numbers for analyses:    
+```{r}
+countmatrix <- round(countmatrix, 0)
+head(countmatrix)
+```
+
+## Get DEGs based on healthy adults vs healthy juveniles from day 0:
+
+healthy adults day 0 --> PSC 0085, 0087, 0090, 0093
+
+healthy juveniles day 0 --> PSC 0118, 0119, 0132, 0141
+### 2023-11-29   
+Need to subset the countmatrix for those 8 libraries:    
+```{r}
+counts_hvs <- countmatrix[,c("PSC.0085", "PSC.0087", "PSC.0090", "PSC.0093", "PSC.0118", "PSC.0119", "PSC.0132", "PSC.0141")]
+head(counts_hvs)
+```
+29476 rows, 8 columns 
+
+Make a data frame for the comparison: 
+```{r}
+colData <- data.frame(condition=factor(c("hadult","hadult","hadult","hadult","hjuve","hjuve","hjuve","hjuve")),
+                      type=factor(rep("paired-end",8)))
+rownames(colData) <- colnames(counts_hvs)
+dds <- DESeqDataSetFromMatrix(countData = counts_hvs,
+                              colData = colData,
+                              design = ~ condition)
+```
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+From [Bioconductor `DESeq2` Vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html):     
+```{r}
+vsd <- vst(dds, blind=FALSE)
+rld <- rlog(dds, blind=FALSE)
+head(assay(vsd), 3)
+```
+```{r}
+plotPCA(vsd, intgroup=c("condition", "type"))
+```
+
+
+PLot PCA comparing sick adults and sick juveniles: 
+
+first arm drop of exposed adults --> PSC 0149, 0150, 0174, 0190
+first arm drop of exposed juves --> PSC 0187, 0188, 0198, 0228
+Need to subset the countmatrix for those 8 libraries:    
+```{r}
+counts_hvs2 <- countmatrix[,c("PSC.0149", "PSC.0150", "PSC.0174", "PSC.0190", "PSC.0187", "PSC.0188", "PSC.0198", "PSC.0228")]
+head(counts_hvs2)
+```
+
+Make a data frame for the comparison: 
+```{r}
+colData <- data.frame(condition=factor(c("eadult","eadult","eadult","eadult","ejuve","ejuve","ejuve","ejuve")),
+                      type=factor(rep("paired-end",8)))
+rownames(colData) <- colnames(counts_hvs2)
+dds <- DESeqDataSetFromMatrix(countData = counts_hvs2,
+                              colData = colData,
+                              design = ~ condition)
+```
+
+```{r}
+dds2 <- DESeq(dds2)
+res2 <- results(dds2)
+res2 <- res[order(rownames(res2)), ]
+```
+
+```{r}
+vsd2 <- vst(dds2, blind=FALSE)
+rld2 <- rlog(dds2, blind=FALSE)
+head(assay(vsd2), 3)
+```
+
+```{r}
+plotPCA(vsd2, intgroup=c("condition", "type"))
+```
+
+

@@ -1,0 +1,28 @@
+---
+title: "04-deseq2-summer2022"
+output: html_document
+date: "2023-11-29"
+---
+Rmd to make PCA plots comparing different groups of summer 2022 RNAseq data from sea star wasting disease challenge experiments. 
+
+```{r}
+sessionInfo()
+```
+
+
+```{r}
+#if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+#BiocManager::install("DESeq2")
+```
+
+Load packages:
+```{r}
+library(DESeq2)
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+library(ggplot2)
+```

@@ -25,7 +25,7 @@ Make the 2015 *P. helianthoides* transcriptome from the Up In Arms paper an inde
 
 ```{bash}
 /home/shared/kallisto/kallisto \
-index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project_pycno/code/2015_phel_transcriptome.index \
+index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/code/2015_phel_transcriptome.index \
 /home/shared/8TB_HDD_02/graceac9/data/transcriptomes/Phel_transcriptome.fasta
 ```
 
@@ -413,6 +413,6 @@ perl /home/shared/trinityrnaseq-v2.12.0/util/abundance_estimates_to_matrix.pl \
 Check out the top of the matrix: 
 
 ```{bash}
-head /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/analyses/Kallisto/2015Phel_transcriptome/kallisto-20220824_2015.isoform.counts.matrix
+head /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/analyses/Kallisto/2015Phel_transcriptome/kallisto-20231129_2015.isoform.counts.matrix
 ```
 

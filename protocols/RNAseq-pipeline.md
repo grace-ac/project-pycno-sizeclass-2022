@@ -59,3 +59,17 @@ All RNAseq data and checksums are now in [owl/nightingales/P_Helianthoides](http
 #### B. Get .fastq.gz files from OWL onto RAVEN   
 ##### i. `ssh` into Raven using credentials in command line.    
 ##### ii. Make a directory for all PSC.fastq.gz files (made one called `pycnornaseq2022` in my `/home/shared/8TB_HDD_02/graceac9/pycnornaseq2022`)  
+
+#### C. Then move files from OWL to pycnornaseq directory in Raven:
+
+##### a. Have Husky OnNet App (BIG-IP Edge Client in Applications folder after downloaded)
+##### b. Log in with UW credentials
+##### c. Put RStudio IP into browser: http://172.25.149.12:8787
+##### d. Log in using Raven Credentials
+##### e. cd into pycnornaseq/ and run:
+```
+wget -r --no-directories --no-parent  -A "PSC-0*" https://owl.fish.washington.edu/nightingales/P_helianthoides
+```
+
+Then the directory will look like this:     
+<img width="573" alt="PSC_files_on_RAVEN" src="https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/protocols/images/screenshot-1.png">

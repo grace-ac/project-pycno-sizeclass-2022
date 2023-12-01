@@ -98,3 +98,32 @@ The report will generate in seconds to minutes.
 To view the report, transfer the .html report to Gannet or Owl, then you can view the .html report on your own browser.
 
 I moved the untrimmed MultiQC report to Owl: navigate in terminal to directory where the .html report lives, then rsync file to where I want it on owl.
+
+```
+graceac9@raven:~/analyses/pycno2022$ rsync --archive --progress --verbose multiqc_report.html grace@owl.fish.washington.edu:/volume1/web/scaphapoda/grace/pycno_2021/multiqc
+grace@owl.fish.washington.edu's password:
+sending incremental file list
+multiqc_report.html
+      1,853,263 100%   72.34MB/s    0:00:00 (xfr#1, to-chk=0/1)
+
+sent 1,853,829 bytes  received 34 bytes  195,143.47 bytes/sec
+total size is 1,853,263  speedup is 1.00
+graceac9@raven:~/analyses/pycno2022$
+```
+
+Untrimmed RNAseq data `MultiQC report`: [owl/scaphapoda/grace/pycno_2022/multiqc/multiqc_report.htm](http://owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/multiqc_report.html).
+
+### 3. Trim RNAseq data: Run `fastp` on Mox, then `MultiQC`
+#### A. `rsync` RNAseq data (fastq.gz) from `nightingales` to `/gscratch/srlab/graceac9/data/pycno/RNAseq/summer2022`.
+
+##### i. Navigate into `/nightingales/P_helianthoides` in command line on Owl.
+##### ii. Copy in code:     
+```
+rsync —archive —progress —verbose PSC-0*.fastq.gz graceac9@mox.hyak.uw.edu:/gscratch/srlab/graceac9/data/pycno/RNAseq/summer2022
+```
+
+##### iii. You'll be prompted for Mox password and 2FA, then you'll be good to go.
+
+Takes ~2 hours for 32 libraries.
+
+#### B. Add .sh script to 

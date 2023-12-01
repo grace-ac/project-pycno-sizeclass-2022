@@ -52,7 +52,7 @@ done
 All RNAseq data and checksums are now in [owl/nightingales/P_Helianthoides](https://owl.fish.washington.edu/nightingales/P_helianthoides/).
 
 ## 2. QC and Trimming
-### 1. Untrimmed Data QC Part I: FASTQC  
+### 1. Untrimmed Data QC Part I: `FASTQC`  
 #### A. Get FastQC if you want to run on your laptop:    
 [https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc](https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc)     
 
@@ -73,3 +73,28 @@ wget -r --no-directories --no-parent  -A "PSC-0*" https://owl.fish.washington.ed
 
 Then the directory will look like this:     
 <img width="573" alt="PSC_files_on_RAVEN" src="https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/protocols/images/screenshot-1.png">
+
+#### D. Get into Rstudio on Raven to run FASTQC:  
+Follow steps a-d in Step C listed above.
+
+Then, follow the code outline in this script: [project-pycno-sizeclass-2022/code/01-FastQC_pre-trim.Rmd](https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/code/01-FastQC_pre-trim.Rmd)
+
+The FASTQC files are saved on Raven: `/home/shared/8TB_HDD_02/graceac9/analyses/pycno2022`.
+
+### 2. Untrimmed Data QC Part II: `MultiQC`   
+In the terminal of the same Rstudio project used in Part D, run:    
+
+```
+eval "$(/opt/anaconda/anaconda3/bin/conda shell.bash hook)"
+conda activate
+```
+
+Then, navigate into the directory where the FASTQC output lives, in this case: `/home/shared/8TB_HDD_02/graceac9/analyses/pycno2022`, then run:   
+```
+multiqc .
+```
+
+The report will generate in seconds to minutes.       
+To view the report, transfer the .html report to Gannet or Owl, then you can view the .html report on your own browser.
+
+I moved the untrimmed MultiQC report to Owl: navigate in terminal to directory where the .html report lives, then rsync file to where I want it on owl.

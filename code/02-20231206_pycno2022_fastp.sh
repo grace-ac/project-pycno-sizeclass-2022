@@ -1,6 +1,6 @@
 #!/bin/bash
 ## Job Name
-#SBATCH --job-name=20231101_pycno2022_fastp
+#SBATCH --job-name=20231206_pycno2022_fastp
 ## Allocation Definition
 #SBATCH --account=srlab
 #SBATCH --partition=srlab
@@ -15,7 +15,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=graceac9@uw.edu
 ## Specify the working directory for this job
-#SBATCH --chdir=/gscratch/srlab/graceac9/analyses/pycno/20231101_PSC2022_trimming
+#SBATCH --chdir=/gscratch/srlab/graceac9/analyses/pycno/20231206_PSC2022_trimming
 
 ### Fastp for Pycnopodia helianthoides coelomocyte RNAseq from Summer 2022
 

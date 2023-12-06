@@ -126,4 +126,16 @@ rsync —archive —progress —verbose PSC-0*.fastq.gz graceac9@mox.hyak.uw.edu
 
 Takes ~2 hours for 32 libraries.
 
-#### B. Add .sh script to 
+#### B. Add .sh script to Mox.
+`/gscratch/srlab/graceac9/jobs/20231206_pycno2022_fastp.sh`
+
+Also, saved script to respository: [project-pycno-sizeclass-2022/code/02-20231206_pycno2022_fastp.sh](https://raw.githubusercontent.com/grace-ac/project-pycno-sizeclass-2022/main/code/02-20231206_pycno2022_fastp.sh)
+
+While in `/gscratch/srlab/graceac9/jobs`, run:  
+```
+sbatch 20231206_pycno2022_fastp
+```
+
+The job should be submitted to the server.
+
+202311206 - started 13:56     

@@ -138,4 +138,4 @@ sbatch 20231206_pycno2022_fastp
 
 The job should be submitted to the server.
 
-202311206 - started 13:56     
+202311206 - started 14:26. Changed wall time to 5 days, because my 10 day wall time conflicted with the monthly Tuesday Mox maintenance. So I'll have to pause the job before maintenance and re-start after.   

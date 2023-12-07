@@ -175,3 +175,5 @@ total size is 1,590,859  speedup is 1.00
 ```
 
 Trimmed MultiQC report: [owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/trimmed/multiqc_report.html](http://owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/trimmed/multiqc_report.html)
+
+# 3. Align to published _Pycnopodia helianthoides_ genome using `HISAT2`

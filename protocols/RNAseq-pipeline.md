@@ -156,3 +156,22 @@ PSC-0###_R1_001.fastq.gz.fastp-trim.20231206.report.json
 PSC-0###_R2_001.fastq.gz.fastp-trim.20231206.fq.gz
 
 Where ## is the library number. Since they're paired end, the reports (report.html and report.json) contain info for both sets of reads (note from Sam White).
+
+### D. Move the multiqc report to OWL
+In same area where other one lives, but add the date and that it's for trimmed data.
+
+Navigate in terminal to directory on Mox where the multiqc report lives
+
+Then:     
+```
+[graceac9@mox2 20231206_PSC2022_trimming]$ rsync --archive --progress --verbose multiqc_report.html grace@owl.fish.washington.edu:/volume1/web/scaphapoda/grace/pycno_2022/multiqc/trimmed
+grace@owl.fish.washington.edu's password:
+sending incremental file list
+multiqc_report.html
+      1,590,859 100%  185.74MB/s    0:00:00 (xfr#1, to-chk=0/1)
+
+sent 1,591,363 bytes  received 34 bytes  28,673.82 bytes/sec
+total size is 1,590,859  speedup is 1.00
+```
+
+Trimmed MultiQC report: [owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/trimmed/multiqc_report.html](http://owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/trimmed/multiqc_report.html)

@@ -131,16 +131,28 @@ Takes ~2 hours for 32 libraries.
 
 Also, saved script to respository: [project-pycno-sizeclass-2022/code/02-20231206_pycno2022_fastp.sh](https://raw.githubusercontent.com/grace-ac/project-pycno-sizeclass-2022/main/code/02-20231206_pycno2022_fastp.sh)
 
-While in `/gscratch/srlab/graceac9/jobs`, run:  
+### C. Run the job.
+Navigate into `/gscratch/srlab/graceac9/jobs`, then run:
 ```
 sbatch 20231206_pycno2022_fastp
 ```
 
-The job should be submitted to the server.
+and it will put output into `/gscratch/srlab/graceac9/analyses/pycno/20231206_PSC2022_trimming`
+
+
+Check job status by running:
+```
+squeue | grep "srlab"
+```
 
 20231206 - started 14:26. Changed wall time to 5 days, because my 10 day wall time conflicted with the monthly Tuesday Mox maintenance. So I'll have to pause the job before maintenance and re-start after.   
 
 20231206 - ended 16:06.
 
-Output folder contains all the trimmed data!     
-`/gscratch/srlab/graceac9/analyses/pycno/20231206_PSC2022_trimming`
+The output will be that each library has 4 files:
+PSC-0###_R1_001.fastq.gz.fastp-trim.20231206.fq.gz
+PSC-0###_R1_001.fastq.gz.fastp-trim.20231206.report.html
+PSC-0###_R1_001.fastq.gz.fastp-trim.20231206.report.json
+PSC-0###_R2_001.fastq.gz.fastp-trim.20231206.fq.gz
+
+Where ## is the library number. Since they're paired end, the reports (report.html and report.json) contain info for both sets of reads (note from Sam White).

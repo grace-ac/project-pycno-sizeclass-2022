@@ -176,4 +176,63 @@ total size is 1,590,859  speedup is 1.00
 
 Trimmed MultiQC report: [owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/trimmed/multiqc_report.html](http://owl.fish.washington.edu/scaphapoda/grace/pycno_2022/multiqc/trimmed/multiqc_report.html)
 
-# 3. Align to published _Pycnopodia helianthoides_ genome using `HISAT2`
+# 3. Align trimmed RNAseq data to published _Pycnopodia helianthoides_ genome using `HISAT2`
+
+## 1. Move genome and annotation to Mox:
+I did this as part of my Summer 2021 work:
+
+### A. Download .zip genome onto laptop
+Navigate to downloads in command line and run:  
+
+```
+curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/GCA_032158295.1/download?include_annotation_type=GENOME_FASTA,GENOME_GFF,RNA_FASTA,CDS_FASTA,PROT_FASTA,SEQUENCE_REPORT&filename=GCA_032158295.1.zip" -H "Accept: application/zip
+```
+
+Code got from NCBI genbank page: [https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_032158295.1/](https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_032158295.1/)
+
+### B. `rsync` .zip file to Mox directory:
+Be in Downloads folder in command line on laptop, then run:
+```
+rsync --archive --progress --verbose /path/to/file username@mox_IP:/path/to/mox/directory
+```
+
+The .zip file is now on Mox:
+`/gscratch/srlab/graceac9/data/pycno/genome/GCA_032158295.1.zip`
+
+### C. Get genome annotation file
+interproscan.gff3 from [https://datadryad.org/stash/dataset/doi:10.5061/dryad.51c59zwfd](https://datadryad.org/stash/dataset/doi:10.5061/dryad.51c59zwfd)
+
+In the same Mox directory where the .zip genome lives (`/gscratch/srlab/graceac9/data/pycno/genome`), run:
+```
+wget https://datadryad.org/stash/downloads/file_stream/2634383
+```
+
+Then in the `/gscratch/srlab/graceac9/data/pycno/genome` directory, you'll have:
+```
+[graceac9@mox2 genome]$ pwd
+/gscratch/srlab/graceac9/data/pycno/genome
+```
+
+### D. Genome is too large to be unzipped on regular Mox, so unzipping will happen in `/gscratch/scrubbed`
+
+#### i. `rsync` .zip genome from laptop downloads into scrubbed directory:
+```
+rsync --archive --progress --verbose GCA_032158295.1.zip graceac9@mox.hyak.uw.edu:/gscratch/scrubbed/graceac9/ncbi_dataset/data
+```
+
+It's now on Mox:
+```
+[graceac9@mox2 data]$ ls
+GCA_032158295.1.zip
+```
+#### ii. unzip the file
+```
+unzip GCA_032158295.1.zip
+```
+Things got a bit messy, but it's now unzipped in a series of new directories:
+
+`/gscratch/scrubbed/graceac9/ncbi_dataset/data/ncbi_dataset/data/GCA_032158295.1`
+
+And the genome itself is: `/gscratch/scrubbed/graceac9/ncbi_dataset/data/ncbi_dataset/data/GCA_032158295.1/GCA_032158295.1_ASM3215829v1_genomic.fna`
+
+The fasta cannot be moved out of `/gscratch/scrubbed/` because it is far too big!

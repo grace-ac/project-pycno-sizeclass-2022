@@ -138,4 +138,9 @@ sbatch 20231206_pycno2022_fastp
 
 The job should be submitted to the server.
 
-202311206 - started 14:26. Changed wall time to 5 days, because my 10 day wall time conflicted with the monthly Tuesday Mox maintenance. So I'll have to pause the job before maintenance and re-start after.   
+20231206 - started 14:26. Changed wall time to 5 days, because my 10 day wall time conflicted with the monthly Tuesday Mox maintenance. So I'll have to pause the job before maintenance and re-start after.   
+
+20231206 - ended 16:06.
+
+Output folder contains all the trimmed data!     
+`/gscratch/srlab/graceac9/analyses/pycno/20231206_PSC2022_trimming`

@@ -236,3 +236,22 @@ Things got a bit messy, but it's now unzipped in a series of new directories:
 And the genome itself is: `/gscratch/scrubbed/graceac9/ncbi_dataset/data/ncbi_dataset/data/GCA_032158295.1/GCA_032158295.1_ASM3215829v1_genomic.fna`
 
 The fasta cannot be moved out of `/gscratch/scrubbed/` because it is far too big!
+
+## 2. Run `HISAT2` with genome and trimmed RNAseq reads
+Make a directory for 2022 `HISAT2` output:     
+`/gscratch/srlab/graceac9/analyses/20231207-hisat2-2022data`
+
+### A. Create .sh for `HISAT2`
+in `/gscratch/scrubbed/graceac9/jobs`, create a .sh script.            20231207_hisat2_2022pycno_align.sh
+
+Be sure to save a copy to GitHub repo, because things get deleted from `/gscratch/scrubbed` every 21 days!       
+Script: [project-pycno-sizeclass-2022/code/02-20231207_hisat2_2022pycno_align.sh](https://raw.githubusercontent.com/grace-ac/project-pycno-sizeclass-2022/main/code/02-20231207_hisat2_2022pycno_align.sh)
+
+### B. Run `HISAT2` script:
+Be in directory that script lives in: `/gscratch/scrubbed/graceac9/jobs`
+```
+sbatch 20231207_hisat2_2022pycno_align.sh
+```
+
+Began 20231207 16:01    
+Ended 

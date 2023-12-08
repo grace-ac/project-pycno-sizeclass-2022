@@ -254,4 +254,16 @@ sbatch 20231207_hisat2_2022pycno_align.sh
 ```
 
 Began 20231207 16:01    
-Ended 
+Ended 20231207 18:59
+
+Output files are apparently here: `/gscratch/scrubbed/graceac9/ncbi_dataset/data/ncbi_dataset/data/GCA_032158295.1`, but I thought they were supposed to be .bam files... and I'm not sure why there are 8.
+
+```
+[graceac9@mox1 GCA_032158295.1]$ pwd
+/gscratch/scrubbed/graceac9/ncbi_dataset/data/ncbi_dataset/data/GCA_032158295.1
+[graceac9@mox1 GCA_032158295.1]$ ls
+GCA_032158295.1_ASM3215829v1_genomic.fna  Phelianthoides_ref.4.ht2  Phelianthoides_ref.8.ht2
+Phelianthoides_ref.1.ht2		  Phelianthoides_ref.5.ht2  sequence_report.jsonl
+Phelianthoides_ref.2.ht2		  Phelianthoides_ref.6.ht2
+Phelianthoides_ref.3.ht2		  Phelianthoides_ref.7.ht2
+```

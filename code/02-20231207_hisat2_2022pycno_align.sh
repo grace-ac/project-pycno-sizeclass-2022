@@ -22,13 +22,13 @@
 set -e
 
 #Load modules needed
-module load bio
-module load samtools/1.12
+#module load bio
 
 #Set variable paths
 data_dir="/gscratch/scrubbed/graceac9/ncbi_dataset/data/ncbi_dataset/data/GCA_032158295.1"
 hisat2_dir="/gscratch/srlab/programs/hisat2-2.2.1/"
 reads_dir="/gscratch/srlab/graceac9/analyses/pycno/20231206_PSC2022_trimming"
+samtools_dir="/gscratch/srlab/programs/samtools-1.10"
 
 #Index the reference genome for P. helianthoides
 ${hisat2_dir}/hisat2-build -f ${data_dir}/GCA_032158295.1_ASM3215829v1_genomic.fna ${data_dir}/Phelianthoides_ref # called the reference genome (scaffolds)
@@ -50,7 +50,7 @@ for i in ${array[@]}
   do
     sample_name=`echo $i | awk -F [.] '{print $2}' | awk -F [/] '{print $6}' | sed 's/_trimmed_trimmed_trimmed//'`
     ${hisat2_dir}/hisat2 -p 8 --dta -x ${data_dir}/Phelianthoides_ref -U ${i} -S ${sample_name}.sam
-        samtools sort -@ 8 -o ${sample_name}.bam ${sample_name}.sam
+        ${samtools_dir}/samtools sort -@ 8 -o ${sample_name}.bam ${sample_name}.sam
     		echo "${i} bam-ified!"
         rm ${sample_name}.sam
 done

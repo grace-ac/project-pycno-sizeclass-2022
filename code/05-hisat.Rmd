@@ -5,20 +5,6 @@ date: "2023-12-12"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-# Trimmed Reads
-
-
-
-
-
-# HiSat Indexing of Genome
-
-
-```{r setup, include=FALSE}
 library(knitr)
 library(tidyverse)
 knitr::opts_chunk$set(
@@ -32,34 +18,41 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Trimmed Reads
+
+
+
+
+
+# HiSat Indexing of Genome
+
+
+
+
 
 # genome
 
-datasets download genome accession GCA_032158295.1 --include gff3,rna,cds,protein,genome,seq-report
+```{bash}
+cd ../data
+/home/shared/datasets download genome accession GCA_032158295.1 --include gff3,rna,cds,protein,genome,seq-report
+```
+
 
 
 
 #genome prep
-```{bash}
 
-```
-
-datasets download genome accession GCA_032158295.1 --include gff3,rna,cds,protein,genome,seq-report
-
+Just fasta... 01
 
 ```{r, engine='bash'}
-
-
 /home/shared/hisat2-2.2.1/hisat2-build \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna \
-GCF_013753865.1_Amil_v2.1 \
---exon ../output/04-Apulcra-hisat/m_exon.tab \
---ss ../output/04-Apulcra-hisat/m_splice_sites.tab \
+../data/GCA_032158295.1_ASM3215829v1_genomic.fna \
+../analyses/05-hisat/GCA_032158295.1_01 \
 -p 40 \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-2> ../output/04-Apulcra-hisat/hisat2-build_stats.txt
+> ../analyses/05-hisat/GCA_032158295.1_01.txt
 
 ```
+
 
 
 

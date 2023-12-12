@@ -247,6 +247,11 @@ in `/gscratch/scrubbed/graceac9/jobs`, create a .sh script.            20231207_
 Be sure to save a copy to GitHub repo, because things get deleted from `/gscratch/scrubbed` every 21 days!       
 Script: [project-pycno-sizeclass-2022/code/02-20231207_hisat2_2022pycno_align.sh](https://raw.githubusercontent.com/grace-ac/project-pycno-sizeclass-2022/main/code/02-20231207_hisat2_2022pycno_align.sh)
 
+Additionally --> back up all of Mox to gannet. Log into gannet.fish.washington.edu on command line, navigate to `/volume2/web/gcrandall/bu-mox` and `rsync` contents:  
+```
+rsync -avz --progress graceac9@mox.hyak.uw.edu:/path/to/what/you/want/to/move /volume2/web/gcrandall/bu-mox
+```
+
 ### B. Run `HISAT2` script:
 Be in directory that script lives in: `/gscratch/scrubbed/graceac9/jobs`
 ```

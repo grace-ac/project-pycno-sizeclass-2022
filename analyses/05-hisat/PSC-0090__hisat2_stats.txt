@@ -1,0 +1,3 @@
+Warning: [Errno 2] No such file or directory: 'PSC-0090__R1_001.fastq.gz.fastp-trim.20231206.fq.gz'
+(ERR): Read file 'PSC-0090__R1_001.fastq.gz.fastp-trim.20231206.fq.gz' doesn't exist
+Exiting now ...

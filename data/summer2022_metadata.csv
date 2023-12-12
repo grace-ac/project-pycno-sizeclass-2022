@@ -1,0 +1,33 @@
+coelom_ID,sample_date,star_ID,star_size,treatment_grp,experiment_day,disease_sign
+PSC 0085,20220621,6,large,exposed,0,healthy
+PSC 0087,20220621,31,large,control,0,healthy
+PSC 0090,20220621,27,large,control,0,healthy
+PSC 0093,20220621,13,large,exposed,0,healthy
+PSC 0095,20220621,10,large,exposed,0,healthy
+PSC 0096,20220621,4,large,control,0,healthy
+PSC 0099,20220621,28,large,exposed,0,healthy
+PSC 0105,20220621,23,large,control,0,healthy
+PSC 0118,20220621,60,small,control,0,healthy
+PSC 0119,20220621,63,small,control,0,healthy
+PSC 0132,20220621,55,small,control,0,healthy
+PSC 0141,20220621,44,small,exposed,0,healthy
+PSC 0149,20220629,28,large,exposed,8,FIRST arm dropped, 1 arm twisted
+PSC 0150,20220629,6,large,exposed,8,FIRST arm dropped, 4 arms twisted
+PSC 0156,20220630,28,large,exposed,9,SECOND arm dropped
+PSC 0174,20220701,30,large,exposed,10,FIRST arm dropped, 6 arms twisted
+PSC 0177,20220702,34,small,control,11,healthy
+PSC 0186,20220702,15,large,control,11,healthy
+PSC 0187,20220702,57,small,exposed,11,1 arm dropped, twisting, stretching
+PSC 0188,20220702,38,small,exposed,11,1 arm dropped, stretching
+PSC 0190,20220702,10,large,exposed,11,FIRST arm dropped
+PSC 0198,20220703,38,small,exposed,12,1 arm dropped, 4 arms twisted
+PSC 0202,20220703,4,large,control,12,healthy
+PSC 0203,20220703,31,large,control,12,healthy
+PSC 0206,20220703,30,large,exposed,12,SECOND arm dropped
+PSC 0209,20220704,9,large,control,13,healthy
+PSC 0217,20220704,6,large,exposed,13,9 arms dropped
+PSC 0219,20220705,63,small,control,14,healthy
+PSC 0228,20220705,61,small,exposed,14,1 arm dropped
+PSC 0230,20220706,65,small,control,15,healthy
+PSC 0231,20220706,13,large,exposed,15,FIRST arm dropped, 5 arms twisted
+PSC 0235,20220706,61,small,exposed,15,lost last 3 arms; just disc; dead

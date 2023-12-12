@@ -1,3 +1,15 @@
-Warning: [Errno 2] No such file or directory: 'PSC-0156_R1_001.fastq.gz.fastp-trim.20231206.fq.gz'
-(ERR): Read file 'PSC-0156_R1_001.fastq.gz.fastp-trim.20231206.fq.gz' doesn't exist
-Exiting now ...
+15310964 reads; of these:
+  15310964 (100.00%) were paired; of these:
+    4699699 (30.69%) aligned concordantly 0 times
+    10031354 (65.52%) aligned concordantly exactly 1 time
+    579911 (3.79%) aligned concordantly >1 times
+    ----
+    4699699 pairs aligned concordantly 0 times; of these:
+      49940 (1.06%) aligned discordantly 1 time
+    ----
+    4649759 pairs aligned 0 times concordantly or discordantly; of these:
+      9299518 mates make up the pairs; of these:
+        7256007 (78.03%) aligned 0 times
+        1811248 (19.48%) aligned exactly 1 time
+        232263 (2.50%) aligned >1 times
+76.30% overall alignment rate

@@ -1,0 +1,26 @@
+---
+title: "05-spreadsheet-mgmt.Rmd"
+output: html_document
+date: "2023-12-12"
+---
+Rmd to create a simpler metadata file of RNAseq libraries for summer 2022 pycno work. 
+
+```{r}
+mdata <- read.delim("../data/summer2022_samples_sequenced.csv", sep = ",")
+head(mdata)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+#simplified metadata
+smdata <- select(mdata, coelom_ID, sample_date, star_ID, star_size, treatment_grp, experiment_day, disease_sign)
+head(smdata)
+```
+```{r}
+write.csv(smdata, "../data/summer2022_metadata.csv", row.names = FALSE, quote = FALSE)
+```
+
+

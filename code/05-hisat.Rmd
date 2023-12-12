@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Trimmed Reads
 
-
+On Gannet
 
 
 
@@ -52,6 +52,65 @@ Just fasta... 01
 > ../analyses/05-hisat/GCA_032158295.1_01.txt
 
 ```
+
+
+# genome feature files
+
+https://datadryad.org/stash/dataset/doi:10.5061/dryad.51c59zwfd
+
+
+```{r, engine='bash'}
+head ../data/aug*
+ls ../data/aug*
+```
+
+
+# extract exons and splice sites
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
+../data/augustus.hints.gtf \
+> ../analyses/05-hisat/exon.tab
+```
+
+```{r, engine='bash', eval=TRUE}
+head ../analyses/05-hisat/exon.tab
+```
+
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
+../data/augustus.hints.gtf \
+> ../analyses/05-hisat/splice_sites.tab
+
+```
+
+
+```{r, engine='bash', eval=TRUE}
+head ../analyses/05-hisat/splice_sites.tab
+```
+
+
+
+# indexing with splice sites
+(02)
+
+
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/GCA_032158295.1_ASM3215829v1_genomic.fna \
+../analyses/05-hisat/GCA_032158295.1_02 \
+--exon ../analyses/05-hisat/exon.tab \
+--ss ../analyses/05-hisat/splice_sites.tab \
+-p 40 \
+../data/augustus.hints.gtf \
+2> ../analyses/05-hisat/GCA_032158295.1_02.txt
+```
+
+
 
 
 

@@ -349,6 +349,11 @@ done
 need gff
 
 ``` bash
+cd ../data
+curl -O https://gannet.fish.washington.edu/seashell/snaps/interproscan.gff3
+```
+
+``` bash
 find ../analyses/05-hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \

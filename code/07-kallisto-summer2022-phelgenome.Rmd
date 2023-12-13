@@ -6,3 +6,35 @@ date: "2023-12-12"
 Rmd to run `kallisto` to get read counts for summer 2022 RNAseq libraries. Instead of making the index the Phel Transcriptome, I'll make the Phel Genome the index. 
 
 Can't use the genome fasta because it contains introns. `HISAT2` is able to handle those, but `kallisto` is not, so I'll be using a fasta of the genes. 
+
+Run this on Raven. 
+
+Confirm `kallisto` location on Raven:
+```{bash}
+/home/shared/kallisto/kallisto
+```
+
+Print working directory
+```{bash}
+pwd
+```
+
+Make the 2023 *P. helianthoides* fasta of genes an index:
+Get the fasta of genes on Raven: 
+
+
+
+```{bash}
+/home/shared/kallisto/kallisto \
+index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project_pycno/code/2015_phel_transcriptome.index \
+/home/shared/8TB_HDD_02/graceac9/data/transcriptomes/Phel_transcriptome.fasta
+```
+
+
+
+
+
+
+
+
+

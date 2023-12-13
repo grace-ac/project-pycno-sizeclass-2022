@@ -9,6 +9,7 @@ Code for RNAseq of 2022 SeaStar experiment
 ```{r setup, include=FALSE}
 library(knitr)
 library(tidyverse)
+library(DT)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,         # Evaluate code chunks
@@ -30,12 +31,14 @@ head(mdata)
 
 ```{r, eval=TRUE}
 #simplified metadata
-smdata <- select(mdata, coelom_ID, sample_date, star_ID, star_size, treatment_grp, experiment_day, disease_sign)
+smdata <- select(mdata, coelom_ID, star_ID, star_size, treatment_grp, experiment_day, disease_sign)
+
+smdata
 
 ```
 
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 datatable(smdata, options = list(scrollX = TRUE, scrollY = "400px", scrollCollapse = TRUE, paging = FALSE))
 
 ```

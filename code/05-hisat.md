@@ -105,26 +105,6 @@ head ../analyses/05-hisat/splice_sites.tab
 
 # Alignment
 
-    Hisat2 alignments
-    "${programs_array[hisat2]}" \
-    -x "${genome_index_name}" \
-    -1 "${fastq_list_R1}" \
-    -2 "${fastq_list_R2}" \
-    -S "${sample_name}".sam \
-    2> "${sample_name}"-hisat2_stats.txt
-
-test run
-
-``` bash
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../analyses/05-hisat/GCA_032158295.1_02 \
--p 48 \
--1 ../data/PSC-0235_R1_001.fastq.gz.fastp-trim.20231206.fq.gz \
--2 ../data/PSC-0235_R2_001.fastq.gz.fastp-trim.20231206.fq.gz \
--S ../analyses/05-hisat/PSC-0235.sam \
-> ../analyses/05-hisat/PSC-0235_hisat2_stats.txt
-```
-
 ``` bash
 
 # Loop through all  files
@@ -159,4 +139,18 @@ for samfile in ../analyses/05-hisat/*.sam; do
   # Index sorted BAM
   /home/shared/samtools-1.12/samtools index -@ 20 "$sorted_bamfile"
 done
+```
+
+# Stringtie
+
+need gff
+
+``` bash
+find ../analyses/05-hisat/*sorted.bam \
+| xargs basename -s .sorted.bam | xargs -I{} \
+/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
+-p 12 \
+-G ../data/Porites_evermanni_v1.annot.gff \
+-o ../output/05-lncRNA-discovery/{}.gtf \
+../output/05-lncRNA-discovery/{}.sorted.bam
 ```

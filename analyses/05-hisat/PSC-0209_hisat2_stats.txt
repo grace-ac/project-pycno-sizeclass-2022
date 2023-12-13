@@ -1,6 +1,15 @@
-Terminated
-(ERR): hisat2-align exited with value 143
-
-gzip: stdout: Broken pipe
-
-gzip: stdout: Broken pipe
+19010874 reads; of these:
+  19010874 (100.00%) were paired; of these:
+    5395274 (28.38%) aligned concordantly 0 times
+    13134755 (69.09%) aligned concordantly exactly 1 time
+    480845 (2.53%) aligned concordantly >1 times
+    ----
+    5395274 pairs aligned concordantly 0 times; of these:
+      32901 (0.61%) aligned discordantly 1 time
+    ----
+    5362373 pairs aligned 0 times concordantly or discordantly; of these:
+      10724746 mates make up the pairs; of these:
+        9644877 (89.93%) aligned 0 times
+        994396 (9.27%) aligned exactly 1 time
+        85473 (0.80%) aligned >1 times
+74.63% overall alignment rate

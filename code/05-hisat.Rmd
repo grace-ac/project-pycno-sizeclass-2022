@@ -4,6 +4,8 @@ output: github_document
 date: "2023-12-12"
 ---
 
+Code for RNAseq of 2022 SeaStar experiment
+
 ```{r setup, include=FALSE}
 library(knitr)
 library(tidyverse)
@@ -16,6 +18,26 @@ knitr::opts_chunk$set(
   fig.height = 4,      # Set plot height in inches
   fig.align = "center" # Align plots to the center
 )
+```
+
+# Sample info
+
+```{r, eval=TRUE}
+mdata <- read.delim("../data/summer2022_samples_sequenced.csv", sep = ",")
+head(mdata)
+```
+
+
+```{r, eval=TRUE}
+#simplified metadata
+smdata <- select(mdata, coelom_ID, sample_date, star_ID, star_size, treatment_grp, experiment_day, disease_sign)
+
+```
+
+
+```{r, eval=TRUE}
+datatable(smdata, options = list(scrollX = TRUE, scrollY = "400px", scrollCollapse = TRUE, paging = FALSE))
+
 ```
 
 # Trimmed Reads
@@ -45,12 +67,13 @@ cd ../data
 /home/shared/datasets download genome accession GCA_032158295.1 --include gff3,rna,cds,protein,genome,seq-report
 ```
 
+then moved around
 
 
 
 #genome prep
 
-Just fasta... 01
+Just fasta... 01  - will not initially use as does not have splice site info. Will keep if ever want to do comparison.
 
 ```{r, engine='bash'}
 /home/shared/hisat2-2.2.1/hisat2-build \
@@ -67,7 +90,7 @@ Just fasta... 01
 https://datadryad.org/stash/dataset/doi:10.5061/dryad.51c59zwfd
 
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 head ../data/aug*
 ls ../data/aug*
 ```
@@ -101,10 +124,9 @@ head ../analyses/05-hisat/splice_sites.tab
 
 
 
-# indexing with splice sites
-(02)
+# Indexing with splice sites
 
-
+Genome indexing- `02` suffix; has exon and splice site tbas incorporated.
 
 
 ```{r, engine='bash'}
@@ -124,9 +146,6 @@ head ../analyses/05-hisat/splice_sites.tab
 
 
 # Alignment
-
-
-
 
 
 ```{r, engine='bash'}
@@ -151,6 +170,8 @@ done
 
 ```
 
+# Converting sam to sorted bams
+
 ```{r, engine='bash'}
 for samfile in ../analyses/05-hisat/*.sam; do
   bamfile="${samfile%.sam}.bam"
@@ -170,6 +191,9 @@ done
 
 
 # Stringtie
+
+need gff
+
 
 ```{r, engine='bash'}
 find ../analyses/05-hisat/*sorted.bam \

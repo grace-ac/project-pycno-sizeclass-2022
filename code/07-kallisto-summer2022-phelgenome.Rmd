@@ -23,14 +23,18 @@ Make the 2023 *P. helianthoides* fasta of genes an index:
 Get the fasta of genes on Raven: 
 
 
+```{bash}
+/home/shared/kallisto/kallisto \
+index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/code/2023_phel_genomefasta.index \
+/home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/data/augustus.hints.codingseq
+```
+
+Get `quant` info:
 
 ```{bash}
 /home/shared/kallisto/kallisto \
-index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project_pycno/code/2015_phel_transcriptome.index \
-/home/shared/8TB_HDD_02/graceac9/data/transcriptomes/Phel_transcriptome.fasta
+quant
 ```
-
-
 
 
 

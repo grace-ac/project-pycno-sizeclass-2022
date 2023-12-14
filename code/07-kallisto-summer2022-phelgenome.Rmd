@@ -104,12 +104,15 @@ perl /home/shared/trinityrnaseq-v2.12.0/util/abundance_estimates_to_matrix.pl \
      ../analyses/07-kallisto/*/abundance.tsv
 ```
 
-
      
 #```{bash}     
 head ../analyses/07-kallisto/test.isoform.counts.matrix
 ```
 
+#```{bash}
+countmatrix <- round(countmatrix, 0)
+str(countmatrix)
+```
 
 
 

@@ -91,6 +91,25 @@ echo "Kallisto quantification complete."
 
 # Creating count matrix 
 
+```{bash}
+pwd
+```
+
+#```{bash}
+perl /home/shared/trinityrnaseq-v2.12.0/util/abundance_estimates_to_matrix.pl \
+--est_method kallisto \
+    --gene_trans_map none \
+    --out_prefix  \
+    --name_sample_by_basedir \
+     ../analyses/07-kallisto/*/abundance.tsv
+```
+
+
+     
+#```{bash}     
+head ../analyses/07-kallisto/test.isoform.counts.matrix
+```
+
 
 
 

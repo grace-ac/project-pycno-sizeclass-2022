@@ -38,7 +38,7 @@ smdata
 ```
 
 
-```{r, eval=FALSE}
+```{r display-pretty-table, eval=FALSE}
 datatable(smdata, options = list(scrollX = TRUE, scrollY = "400px", scrollCollapse = TRUE, paging = FALSE))
 
 ```

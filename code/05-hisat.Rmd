@@ -43,7 +43,7 @@ datatable(smdata, options = list(scrollX = TRUE, scrollY = "400px", scrollCollap
 
 ```
 
-# Trimmed Reads
+# Download Trimmed Reads
 
 On Gannet
 https://gannet.fish.washington.edu/gcrandall/bu-mox/20231206_PSC2022_trimming/
@@ -51,6 +51,7 @@ https://gannet.fish.washington.edu/gcrandall/bu-mox/20231206_PSC2022_trimming/
 ```{bash download-trimmed-reads}
 wget -r \
 --no-directories --no-parent \
+--quiet \
 -P ../data \
 -A "*.fq.gz" https://gannet.fish.washington.edu/gcrandall/bu-mox/20231206_PSC2022_trimming/
 ```

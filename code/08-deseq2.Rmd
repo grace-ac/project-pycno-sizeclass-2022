@@ -1,0 +1,10 @@
+---
+title: "08-deseq2.Rmd"
+output: html_document
+date: "2023-12-14"
+---
+Rmd to use `DESeq2` to get differentially expressed genes lists from summmer 2022 samples. Experiment was comparing the response to exposure of SSWD between small (juvenile) and large (adult) _Pycnopodia helianthoides_ and compared to control stars. 
+
+Sample info: 
+https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/data/summer2022_metadata.csv 
+

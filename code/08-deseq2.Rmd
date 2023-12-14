@@ -7,4 +7,91 @@ Rmd to use `DESeq2` to get differentially expressed genes lists from summmer 202
 
 Sample info: 
 https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/data/summer2022_metadata.csv 
+Load packages:    
+```{r}
+library(DESeq2)
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+```
+
+Read in count matrix created on Raven using: https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/code/07-kallisto-summer2022-phelgenome.Rmd 
+
+```{r}
+countmatrix <- read.delim("../analyses/07-kallisto-phelgenome/kallisto_20231204.isoform.counts.matrix", header = TRUE, sep = '\t')
+rownames(countmatrix) <- countmatrix$X
+countmatrix <- countmatrix[,-1]
+head(countmatrix)
+```
+
+Round integers up to hole numbers for further analysis:
+```{r}
+countmatrix <- round(countmatrix, 0)
+head(countmatrix)
+```
+
+# Compare: Exposed Large Adult _Pycnopodia helianthoides_ (n=4) to Control Large Adult _Pycnopodia helianthoides_ (n=4)
+
+Samples:
+Exposed: PSC.0190; PSC.0206; PSC.0217; PSC.0231     
+Control: PSC.0186; PSC.0202; PSC.0203; PSC.0209    
+
+Pull out those samples:
+```{r}
+#levlc is large exposed vs large control
+levlc <- select(countmatrix, "PSC.0190", "PSC.0206", "PSC.0217", "PSC.0231", "PSC.0186", "PSC.0202", "PSC.0203", "PSC.0209")
+head(levlc)
+```
+
+Get DEGs based on exposure to SSWD / disease sign (all exposed adults had at least 1 dropped arm and some had twisting)
+
+```{r}
+colData <- data.frame(condition=factor(c("exposed", "exposed", "exposed", "exposed", "control", "control", "control", "control")), 
+                             type=factor(rep("paired-end", 8)))
+rownames(colData) <- colnames(levlc)
+dds <- DESeqDataSetFromMatrix(countData = levlc,
+                                     colData = colData, 
+                                     design = ~ condition)
+```
+
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+```{r}
+head(res)
+```
+
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+[1] 4617    6
+
+```{r}
+adult_exposure_fig <- res
+# The main plot
+plot(adult_exposure_fig$baseMean, adult_exposure_fig$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main="SSWD Exposure Status  (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+adult_exposure_fig.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(adult_exposure_fig.sig$baseMean, adult_exposure_fig.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+
+# Compare: Exposed Small Juvenile _Pycnopodia helianthoides_ (n=4) to Control Small Juvenile _Pycnopodia helianthoides_ (n=4)
+
+
+
+
+
+
+
+
 

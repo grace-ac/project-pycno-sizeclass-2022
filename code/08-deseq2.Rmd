@@ -87,7 +87,9 @@ abline(h=c(-1,1), col="blue")
 
 # Compare: Exposed Small Juvenile _Pycnopodia helianthoides_ (n=4) to Control Small Juvenile _Pycnopodia helianthoides_ (n=4)
 
-
+Samples:    
+Exposed: PSC.0187; PSC.0188; PSC.0198; PSC.0228     
+Control: PSC.0141; PSC.0
 
 
 

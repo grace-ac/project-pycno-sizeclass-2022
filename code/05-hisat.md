@@ -360,3 +360,9 @@ find ../analyses/05-hisat/*sorted.bam \
 -o ../analyses/05-hisat/{}.gtf \
 ../analyses/05-hisat/{}.sorted.bam
 ```
+
+output
+```
+Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
+Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
+```

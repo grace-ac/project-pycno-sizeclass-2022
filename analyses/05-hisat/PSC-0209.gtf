@@ -1,0 +1,2 @@
+# /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie -p 20 -o ../analyses/05-hisat/PSC-0209.gtf ../analyses/05-hisat/PSC-0209.sorted.bam
+# StringTie version 2.2.1

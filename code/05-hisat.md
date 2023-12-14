@@ -346,19 +346,61 @@ done
 
 # Stringtie
 
-need gff
-
 ``` bash
 cd ../data
 curl -O https://gannet.fish.washington.edu/seashell/snaps/interproscan.gff3
 ```
 
 ``` bash
+head ../data/interproscan.gff3 
+```
+
+    ## ##gff-version 3
+    ## ##feature-ontology http://song.cvs.sourceforge.net/viewvc/song/ontology/sofa.obo?revision=1.269
+    ## ##interproscan-version 5.61-93.0
+    ## ##sequence-region g3531.t1 1 635
+    ## g3531.t1 .   polypeptide 1   635 .   +   .   ID=g3531.t1;md5=e585d160537c159881dfb8cf27e10150
+    ## g3531.t1 CDD protein_match   288 537 2.58694E-146    +   .   date=19-04-2023;Target=g3531.t1 288 537;ID=match$1_288_537;signature_desc=ABC1_ADCK3;Name=cd13970;status=T;Dbxref="InterPro:IPR034646"
+    ## g3531.t1 PANTHER protein_match   6   633 8.3E-243    +   .   date=19-04-2023;Target=g3531.t1 6 633;ID=match$2_6_633;Name=PTHR43851;status=T
+    ## g3531.t1 MobiDBLite  protein_match   151 176 .   +   .   date=19-04-2023;Target=g3531.t1 151 176;ID=match$3_151_176;signature_desc=consensus disorder prediction;Name=mobidb-lite;status=T
+    ## g3531.t1 MobiDBLite  protein_match   74  200 .   +   .   date=19-04-2023;Target=g3531.t1 74 200;ID=match$4_74_200;signature_desc=consensus disorder prediction;Name=mobidb-lite;status=T
+    ## g3531.t1 MobiDBLite  protein_match   83  149 .   +   .   date=19-04-2023;Target=g3531.t1 83 149;ID=match$5_83_149;signature_desc=consensus disorder prediction;Name=mobidb-lite;status=T
+
+``` bash
 find ../analyses/05-hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
--p 12 \
--G ../data/Porites_evermanni_v1.annot.gff \
--o ../output/05-lncRNA-discovery/{}.gtf \
-../output/05-lncRNA-discovery/{}.sorted.bam
+-p 20 \
+-o ../analyses/05-hisat/{}.gtf \
+../analyses/05-hisat/{}.sorted.bam
 ```
+
+``` bash
+head ../analyses/05-hisat/*.gtf | head -25
+```
+
+    ## ==> ../analyses/05-hisat/PSC-0085.gtf <==
+    ## # /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie -p 20 -o ../analyses/05-hisat/PSC-0085.gtf ../analyses/05-hisat/PSC-0085.sorted.bam
+    ## # StringTie version 2.2.1
+    ## CM063243.1   StringTie   transcript  16862   21750   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; cov "7.316682"; FPKM "2.272532"; TPM "6.570474";
+    ## CM063243.1   StringTie   exon    16862   17039   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; exon_number "1"; cov "8.224985";
+    ## CM063243.1   StringTie   exon    18567   18598   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; exon_number "2"; cov "5.343992";
+    ## CM063243.1   StringTie   exon    21627   21750   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; exon_number "3"; cov "6.521910";
+    ## CM063243.1   StringTie   transcript  16862   19857   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; cov "7.869413"; FPKM "2.444208"; TPM "7.066833";
+    ## CM063243.1   StringTie   exon    16862   17039   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; exon_number "1"; cov "15.679487";
+    ## CM063243.1   StringTie   exon    18567   19857   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; exon_number "2"; cov "6.792579";
+    ## CM063243.1   StringTie   transcript  39611   40853   1000    -   .   gene_id "STRG.2"; transcript_id "STRG.2.1"; cov "10.447793"; FPKM "3.245042"; TPM "9.382252";
+    ## 
+    ## ==> ../analyses/05-hisat/PSC-0087.gtf <==
+    ## # /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie -p 20 -o ../analyses/05-hisat/PSC-0087.gtf ../analyses/05-hisat/PSC-0087.sorted.bam
+    ## # StringTie version 2.2.1
+    ## CM063243.1   StringTie   transcript  16861   21728   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; cov "13.773430"; FPKM "4.588499"; TPM "15.322474";
+    ## CM063243.1   StringTie   exon    16861   17039   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; exon_number "1"; cov "14.391528";
+    ## CM063243.1   StringTie   exon    18567   18598   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; exon_number "2"; cov "19.468750";
+    ## CM063243.1   StringTie   exon    21627   21728   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.1"; exon_number "3"; cov "10.901960";
+    ## CM063243.1   StringTie   transcript  16861   36000   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; cov "3.747169"; FPKM "1.248337"; TPM "4.168599";
+    ## CM063243.1   StringTie   exon    16861   17039   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; exon_number "1"; cov "3.333803";
+    ## CM063243.1   StringTie   exon    27014   27112   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; exon_number "2"; cov "5.232324";
+    ## CM063243.1   StringTie   exon    35926   36000   1000    -   .   gene_id "STRG.1"; transcript_id "STRG.1.2"; exon_number "3"; cov "2.773334";
+    ## 
+    ## ==> ../analyses/05-hisat/PSC-0090.gtf <==

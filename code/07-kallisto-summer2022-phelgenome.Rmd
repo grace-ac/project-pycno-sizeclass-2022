@@ -67,7 +67,7 @@ for FILE in "$DATA_DIRECTORY"/*.fq.gz; do
 
     # Run Kallisto quantification
     /home/shared/kallisto_linux-v0.50.1/kallisto quant -i "$KALLISTO_INDEX" -o "$SAMPLE_OUTPUT" \
-       -s "$FILE"
+       -l -s "$FILE"
 done
 
 echo "Kallisto quantification complete."

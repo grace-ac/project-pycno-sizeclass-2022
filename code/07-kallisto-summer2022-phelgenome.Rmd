@@ -24,8 +24,9 @@ Get the fasta of genes on Raven:
 
 
 ```{bash}
-/home/shared/kallisto/kallisto \
-index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/code/2023_phel_genomefasta.index \
+/home/shared/kallisto_linux-v0.50.1/kallisto index \
+-t 40 \
+-i /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/code/2023_phel_genomefasta.index \
 /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/data/augustus.hints.codingseq
 ```
 
@@ -47,6 +48,12 @@ Trimmed summer 2022 RNAseq reads live: `/home/shared/8TB_HDD_02/graceac9/data/py
 pwd
 ```
 
+```{bash}
+#list all files in directory, get count of how many files
+DATA_DIRECTORY="../../../data/pycno2022"
+ls -1 "$DATA_DIRECTORY"/*.fq.gz | wc -l
+```
+
 # Kallisto quanitification 
 
 ```{bash}
@@ -55,19 +62,25 @@ DATA_DIRECTORY="../../../data/pycno2022"
 KALLISTO_INDEX="2023_phel_genomefasta.index"
 OUTPUT_DIRECTORY="../analyses/07-kallisto-phelgenome"
 
+pwd
+echo $DATA_DIRECTORY
 
 # Iterate over all .fq.gz files in the data directory
-for FILE in "$DATA_DIRECTORY"/*.fq.gz; do
+for FILE in "$DATA_DIRECTORY"/*_R1_001.fastq.gz.fastp-trim.20231101.fq.gz; do
     # Extract the base name of the file for naming the output folder
-    BASENAME=$(basename "$FILE" _R1_001.fq.gz)
+    BASENAME=$(basename "$FILE" _R1_001.fastq.gz.fastp-trim.20231101.fq.gz)
 
     # Create output directory for this sample3
     SAMPLE_OUTPUT="$OUTPUT_DIRECTORY/$BASENAME"
     mkdir -p "$SAMPLE_OUTPUT"
 
     # Run Kallisto quantification
-    /home/shared/kallisto_linux-v0.50.1/kallisto quant -i "$KALLISTO_INDEX" -o "$SAMPLE_OUTPUT" \
-       -l -s "$FILE"
+    /home/shared/kallisto_linux-v0.50.1/kallisto quant \
+    -i "$KALLISTO_INDEX" \
+    -o "$SAMPLE_OUTPUT" \
+    -t 40 \
+    "$DATA_DIRECTORY"/"$BASENAME"_R1_001.fastq.gz.fastp-trim.20231101.fq.gz \
+    "$DATA_DIRECTORY"/"$BASENAME"_R2_001.fastq.gz.fastp-trim.20231101.fq.gz
 done
 
 echo "Kallisto quantification complete."

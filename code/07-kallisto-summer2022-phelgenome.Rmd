@@ -95,21 +95,28 @@ echo "Kallisto quantification complete."
 pwd
 ```
 
-#```{bash}
+```{bash}
 perl /home/shared/trinityrnaseq-v2.12.0/util/abundance_estimates_to_matrix.pl \
 --est_method kallisto \
     --gene_trans_map none \
-    --out_prefix  \
+    --out_prefix ../analyses/07-kallisto-phelgenome/kallisto_20231204 \
     --name_sample_by_basedir \
-     ../analyses/07-kallisto/*/abundance.tsv
+     ../analyses/07-kallisto-phelgenome/*/abundance.tsv
 ```
 
      
-#```{bash}     
-head ../analyses/07-kallisto/test.isoform.counts.matrix
+```{bash}     
+head ../analyses/07-kallisto-phelgenome/kallisto_20231204.isoform.counts.matrix
 ```
 
-#```{bash}
+```{r}
+countmatrix <- read.delim("../analyses/07-kallisto-phelgenome/kallisto_20231204.isoform.counts.matrix", header = TRUE, sep = '\t')
+rownames(countmatrix) <- countmatrix$X
+countmatrix <- countmatrix[,-1]
+head(countmatrix)
+```
+
+```{r}
 countmatrix <- round(countmatrix, 0)
 str(countmatrix)
 ```

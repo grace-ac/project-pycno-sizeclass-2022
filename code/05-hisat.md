@@ -352,6 +352,21 @@ curl -O https://gannet.fish.washington.edu/seashell/snaps/interproscan.gff3
 ```
 
 ``` bash
+head ../data/interproscan.gff3 
+```
+
+    ## ##gff-version 3
+    ## ##feature-ontology http://song.cvs.sourceforge.net/viewvc/song/ontology/sofa.obo?revision=1.269
+    ## ##interproscan-version 5.61-93.0
+    ## ##sequence-region g3531.t1 1 635
+    ## g3531.t1 .   polypeptide 1   635 .   +   .   ID=g3531.t1;md5=e585d160537c159881dfb8cf27e10150
+    ## g3531.t1 CDD protein_match   288 537 2.58694E-146    +   .   date=19-04-2023;Target=g3531.t1 288 537;ID=match$1_288_537;signature_desc=ABC1_ADCK3;Name=cd13970;status=T;Dbxref="InterPro:IPR034646"
+    ## g3531.t1 PANTHER protein_match   6   633 8.3E-243    +   .   date=19-04-2023;Target=g3531.t1 6 633;ID=match$2_6_633;Name=PTHR43851;status=T
+    ## g3531.t1 MobiDBLite  protein_match   151 176 .   +   .   date=19-04-2023;Target=g3531.t1 151 176;ID=match$3_151_176;signature_desc=consensus disorder prediction;Name=mobidb-lite;status=T
+    ## g3531.t1 MobiDBLite  protein_match   74  200 .   +   .   date=19-04-2023;Target=g3531.t1 74 200;ID=match$4_74_200;signature_desc=consensus disorder prediction;Name=mobidb-lite;status=T
+    ## g3531.t1 MobiDBLite  protein_match   83  149 .   +   .   date=19-04-2023;Target=g3531.t1 83 149;ID=match$5_83_149;signature_desc=consensus disorder prediction;Name=mobidb-lite;status=T
+
+``` bash
 find ../analyses/05-hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
@@ -362,7 +377,7 @@ find ../analyses/05-hisat/*sorted.bam \
 ```
 
 output
-```
-Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
-Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
-```
+
+    Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
+    Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
+    Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)

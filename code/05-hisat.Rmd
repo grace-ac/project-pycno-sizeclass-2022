@@ -222,3 +222,16 @@ head ../analyses/05-hisat/*.gtf | head -25
 
 ```
 
+
+
+```{r, engine='bash'}
+find ../analyses/05-hisat/*sorted.bam \
+| xargs basename -s .sorted.bam | xargs -I{} \
+/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
+-B \
+-e \
+--merge \
+-p 20 \
+-o ../analyses/05-hisat/{}_merge.gtf \
+../analyses/05-hisat/{}.sorted.bam
+```

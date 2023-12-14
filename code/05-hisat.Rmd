@@ -195,7 +195,6 @@ done
 
 # Stringtie
 
-need gff
 
 
 ```{bash}

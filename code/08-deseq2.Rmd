@@ -89,7 +89,52 @@ abline(h=c(-1,1), col="blue")
 
 Samples:    
 Exposed: PSC.0187; PSC.0188; PSC.0198; PSC.0228     
-Control: PSC.0141; PSC.0
+Control: PSC.0141; PSC.0177; PSC.0219; PSC.0230
+
+Pull out those samples:
+```{r}
+#sevsc is small exposed vs small control
+sevsc <- select(countmatrix, "PSC.0187", "PSC.0188", "PSC.0198", "PSC.0228", "PSC.0141", "PSC.0177", "PSC.0219", "PSC.0230")
+head(sevsc)
+```
+
+```{r}
+colData <- data.frame(condition=factor(c("exposed", "exposed", "exposed", "exposed", "control", "control", "control", "control")), 
+                             type=factor(rep("paired-end", 8)))
+rownames(colData) <- colnames(sevsc)
+dds <- DESeqDataSetFromMatrix(countData = sevsc,
+                                     colData = colData, 
+                                     design = ~ condition)
+```
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+```{r}
+head(res)
+```
+
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+[1] 6125    6
+
+```{r}
+juvenile_exposure_fig <- res
+# The main plot
+plot(juvenile_exposure_fig$baseMean, juvenile_exposure_fig$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main="SSWD Exposure Status  (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+juvenile_exposure_fig.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(juvenile_exposure_fig.sig$baseMean, juvenile_exposure_fig.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
 
 
 

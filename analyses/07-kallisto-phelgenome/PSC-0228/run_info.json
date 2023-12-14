@@ -1,0 +1,13 @@
+{
+	"n_targets": 26581,
+	"n_bootstraps": 0,
+	"n_processed": 18582788,
+	"n_pseudoaligned": 6824431,
+	"n_unique": 6112297,
+	"p_pseudoaligned": 36.7,
+	"p_unique": 32.9,
+	"kallisto_version": "0.50.1",
+	"index_version": 13,
+	"start_time": "Thu Dec 14 12:01:22 2023",
+	"call": "/home/shared/kallisto_linux-v0.50.1/kallisto quant -i 2023_phel_genomefasta.index -o ../analyses/07-kallisto-phelgenome/PSC-0228 -t 40 ../../../data/pycno2022/PSC-0228_R1_001.fastq.gz.fastp-trim.20231101.fq.gz ../../../data/pycno2022/PSC-0228_R2_001.fastq.gz.fastp-trim.20231101.fq.gz"
+}

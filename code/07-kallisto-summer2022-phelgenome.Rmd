@@ -9,17 +9,17 @@ Can't use the genome fasta because it contains introns. `HISAT2` is able to hand
 
 Run this on Raven. 
 
-Confirm `kallisto` location on Raven:
+# Confirm `kallisto` location on Raven:
 ```{bash}
 /home/shared/kallisto/kallisto
 ```
 
-Print working directory
+## Print working directory
 ```{bash}
 pwd
 ```
 
-Make the 2023 *P. helianthoides* fasta of genes an index:
+# Make the 2023 *P. helianthoides* fasta of genes an index:
 Get the fasta of genes on Raven: 
 
 
@@ -29,7 +29,7 @@ index -i /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/co
 /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/data/augustus.hints.codingseq
 ```
 
-Get `quant` info:
+# Get `quant` info:
 
 ```{bash}
 /home/shared/kallisto/kallisto \
@@ -37,7 +37,56 @@ quant
 ```
 
 
+I want all kallisto files to go into: 
 
+`project-pycno-sizeclass-2022/analyses/07-kallisto-phelgenome
+
+Trimmed summer 2022 RNAseq reads live: `/home/shared/8TB_HDD_02/graceac9/data/pycno2022`
+
+```{bash}
+pwd
+```
+
+# Kallisto quanitification 
+
+```{bash}
+# Set the paths
+DATA_DIRECTORY="../../../data/pycno2022"
+KALLISTO_INDEX="2023_phel_genomefasta.index"
+OUTPUT_DIRECTORY="../analyses/07-kallisto-phelgenome"
+
+
+# Iterate over all .fq.gz files in the data directory
+for FILE in "$DATA_DIRECTORY"/*.fq.gz; do
+    # Extract the base name of the file for naming the output folder
+    BASENAME=$(basename "$FILE" _R1_001.fq.gz)
+
+    # Create output directory for this sample
+    SAMPLE_OUTPUT="$OUTPUT_DIRECTORY/$BASENAME"
+    mkdir -p "$SAMPLE_OUTPUT"
+
+    # Run Kallisto quantification
+    /home/shared/kallisto_linux-v0.50.1/kallisto quant -i "$KALLISTO_INDEX" -o "$SAMPLE_OUTPUT" \
+       -s "$FILE"
+done
+
+echo "Kallisto quantification complete."
+```
+
+
+#```{bash}
+find /home/shared/8TB_HDD_02/graceac9/data/pycno2022 \
+| xargs -n 1 basename -s _R1_001.fastq.gz.fastp-trim.20231101.fq.gz \
+| xargs -I{} /home/shared/kallisto/kallisto quant \
+  -i /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/code/2023_phel_genomefasta.index \
+  -o /home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/analyses/07-kallisto-phelgenome/{}_output \
+  -t 20 \
+  /home/shared/8TB_HDD_01/apul/trimmed/{}_R1_001.fastq.gz.fastp-trim.20231101.fq.gz \
+  /home/shared/8TB_HDD_01/apul/trimmed/{}_R2_001.fastq.gz.fastp-trim.20231101.fq.gz \
+2>&1 | tee ../analyses/07-kallisto-phelgenome/{}.out
+```
+
+# Creating count matrix 
 
 
 

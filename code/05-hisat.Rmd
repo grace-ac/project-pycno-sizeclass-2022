@@ -212,15 +212,13 @@ find ../analyses/05-hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
 -p 20 \
--G ../data/interproscan.gff3 \
 -o ../analyses/05-hisat/{}.gtf \
 ../analyses/05-hisat/{}.sorted.bam
 ```
-output 
 
-```
-Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
-Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
-Error: could not any valid reference transcripts in ../data/interproscan.gff3 (invalid GTF/GFF file?)
+
+```{r, engine='bash', eval=TRUE}
+head ../analyses/05-hisat/*.gtf | head -25
+
 ```
 

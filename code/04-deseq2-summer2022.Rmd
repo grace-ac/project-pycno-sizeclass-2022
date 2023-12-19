@@ -3,7 +3,7 @@ title: "04-deseq2-summer2022"
 output: html_document
 date: "2023-11-29"
 ---
-Rmd to make PCA plots comparing different groups of summer 2022 RNAseq data from sea star wasting disease challenge experiments. 
+Rmd to make PCA plots comparing different groups of summer 2022 RNAseq data from sea star wasting disease challenge experiments. Count data from comparison to Up in Arms transcriptome. 
 
 ```{r}
 sessionInfo()

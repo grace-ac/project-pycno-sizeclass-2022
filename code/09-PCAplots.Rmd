@@ -40,10 +40,29 @@ head(countmatrix)
 
 Make a data frame for the comparison: 
 ```{r}
-colData <- data.frame(condition=factor(c("hadult","hadult","hadult","hadult","hjuve","hjuve","hjuve","hjuve")),
+colData <- data.frame(condition=factor(c("day0L", "day0L", "day0L", "day0L", "day0L", "day0L", "day0L", "day0L", "day0S", "day0S", "day0S", "day0S", "day8LA",  "day8LA", "day9LA2", "day10LA", "day11SH", "day11SH", "day11SA", "day11SA", "day11LA", "day12SA", "day12LH", "day12LH", "day12LA2", "day13LH", "day13LA9", "day14SH", "day14SA", "day15SH", "day15LA", "day15SD")),
                       type=factor(rep("paired-end",32)))
-rownames(colData) <- colnames(counts_hvs)
+rownames(colData) <- colnames(countmatrix)
 dds <- DESeqDataSetFromMatrix(countData = countmatrix,
                               colData = colData,
                               design = ~ condition)
 ```
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+From [Bioconductor `DESeq2` Vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html):     
+```{r}
+vsd <- vst(dds, blind=FALSE)
+rld <- rlog(dds, blind=FALSE)
+head(assay(vsd), 3)
+```
+
+
+```{r}
+plotPCA(vsd, intgroup=c("condition", "type"))
+```
+
+

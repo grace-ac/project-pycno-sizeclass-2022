@@ -5,4 +5,45 @@ date: "2023-12-19"
 ---
 Rmd to make some PCA plots of summer 2022 RNAseq data to help figure out what `DESeq2` comparisons to make. 
 
+# Start with regular PCA plots
+```{r}
+#if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
+#BiocManager::install("DESeq2")
+```
+
+Load packages:
+```{r}
+library(DESeq2)
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+library(ggplot2)
+```
+
+# Read in count matrix from comparing the 2022 _Pycnopodia helianthoides_ coelomocyte RNAseq libraries with the 2015 _Pycnopodia helianthoides_ gene list of the published genome:  
+```{r}
+countmatrix <- read.delim("../analyses/07-kallisto-phelgenome/kallisto_20231204.isoform.counts.matrix", header = TRUE, sep = '\t')
+rownames(countmatrix) <- countmatrix$X
+countmatrix <- countmatrix[,-1]
+head(countmatrix)
+```
+26581 rows, 32 columns 
+
+Round integers up to whole numbers for analyses:    
+```{r}
+countmatrix <- round(countmatrix, 0)
+head(countmatrix)
+```
+
+Make a data frame for the comparison: 
+```{r}
+colData <- data.frame(condition=factor(c("hadult","hadult","hadult","hadult","hjuve","hjuve","hjuve","hjuve")),
+                      type=factor(rep("paired-end",32)))
+rownames(colData) <- colnames(counts_hvs)
+dds <- DESeqDataSetFromMatrix(countData = countmatrix,
+                              colData = colData,
+                              design = ~ condition)
+```

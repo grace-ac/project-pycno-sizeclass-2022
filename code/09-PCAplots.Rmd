@@ -5,7 +5,7 @@ date: "2023-12-19"
 ---
 Rmd to make some PCA plots of summer 2022 RNAseq data to help figure out what `DESeq2` comparisons to make. 
 
-# Start with regular PCA plots
+# Start with PCA plot of all 32 libraries  
 ```{r}
 #if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -64,5 +64,24 @@ head(assay(vsd), 3)
 ```{r}
 plotPCA(vsd, intgroup=c("condition", "type"))
 ```
+
+That's kind of messy and confusing... 
+
+# Adonis PCA to see if individual treatment and days since exposure interacts with disease sign 
+
+So based on notes I have from December 4, 2023 Pycno meeting with Alyssa and Melanie, I'm going to: 
+All first arm drop ones
+Do they all look the same or different
+NMDS with adonis→ have the grouping be first arm drop, 
+Test whether day interacts with time of disease 
+An ANOVA you can do with an NMDS 
+How does individual treatment and date interact with disease sign 
+https://rdrr.io/rforge/vegan/man/adonis.html 
+Response variable treatment by size of disease by day
+Interactive 
+If that was significant, then that would say there’s a difference in sign of disease 
+If significance, need to to pay attention to date since the exposure rather than the sign 
+ 
+
 
 

@@ -1,0 +1,8 @@
+---
+title: "09-PCAplots.Rmd"
+output: html_document
+date: "2023-12-19"
+---
+Rmd to make some PCA plots of summer 2022 RNAseq data to help figure out what `DESeq2` comparisons to make. 
+
+

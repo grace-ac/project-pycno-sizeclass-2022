@@ -82,6 +82,15 @@ Interactive
 If that was significant, then that would say there’s a difference in sign of disease 
 If significance, need to to pay attention to date since the exposure rather than the sign 
  
-
+| coelom_ID | star_ID | star_size | treatment_grp | experiment_day | disease_sign                        |
+|-----------|---------|-----------|---------------|----------------|-------------------------------------|
+| PSC 0149  |      28 | large     | exposed       |              8 | FIRST arm dropped, 1 arm twisted    |
+| PSC 0150  |       6 | large     | exposed       |              8 | FIRST arm dropped, 4 arms twisted   |
+| PSC 0174  |      30 | large     | exposed       |             10 | FIRST arm dropped, 6 arms twisted   |
+| PSC 0187  |      57 | small     | exposed       |             11 | 1 arm dropped, twisting, stretching |
+| PSC 0188  |      38 | small     | exposed       |             11 | 1 arm dropped, stretching           |
+| PSC 0190  |      10 | large     | exposed       |             11 | FIRST arm dropped                   |
+| PSC 0228  |      61 | small     | exposed       |             14 | 1 arm dropped                       |
+| PSC 0231  |      13 | large     | exposed       |             15 | FIRST arm dropped, 5 arms twisted   |
 
 

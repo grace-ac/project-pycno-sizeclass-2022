@@ -69,6 +69,10 @@ That's kind of messy and confusing...
 
 # Adonis PCA to see if individual treatment and days since exposure interacts with disease sign 
 
+```{r}
+install.packages("adonis")
+```
+
 So based on notes I have from December 4, 2023 Pycno meeting with Alyssa and Melanie, I'm going to: 
 All first arm drop ones
 Do they all look the same or different
@@ -77,10 +81,12 @@ Test whether day interacts with time of disease
 An ANOVA you can do with an NMDS 
 How does individual treatment and date interact with disease sign 
 https://rdrr.io/rforge/vegan/man/adonis.html 
-Response variable treatment by size of disease by day
+Response variable treatment by sign of disease by day
 Interactive 
 If that was significant, then that would say there’s a difference in sign of disease 
 If significance, need to to pay attention to date since the exposure rather than the sign 
+
+Treatment in this case is whether the star is an adult or juvenile...? 
  
 | coelom_ID | star_ID | star_size | treatment_grp | experiment_day | disease_sign                        |
 |-----------|---------|-----------|---------------|----------------|-------------------------------------|

@@ -5,6 +5,10 @@ date: "2023-12-19"
 ---
 Rmd to make some PCA plots of summer 2022 RNAseq data to help figure out what `DESeq2` comparisons to make. 
 
+```{r}
+sessionInfo()
+```
+
 # Start with PCA plot of all 32 libraries  
 ```{r}
 #if (!require("BiocManager", quietly = TRUE))

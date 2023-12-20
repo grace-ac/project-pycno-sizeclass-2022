@@ -5,16 +5,20 @@ date: "2023-12-19"
 ---
 Rmd to make some PCA plots of summer 2022 RNAseq data to help figure out what `DESeq2` comparisons to make. 
 
+
+New version of RStudio downloaded Dec 19, 2023 
 ```{r}
 sessionInfo()
 ```
 
 # Start with PCA plot of all 32 libraries  
 ```{r}
+#commented out chunk 20231219 bc have run already
 #if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 #BiocManager::install("DESeq2")
+
 ```
 
 Load packages:
@@ -25,6 +29,7 @@ library(pheatmap)
 library(RColorBrewer)
 library(data.table)
 library(ggplot2)
+library(dplyr)
 ```
 
 # Read in count matrix from comparing the 2022 _Pycnopodia helianthoides_ coelomocyte RNAseq libraries with the 2015 _Pycnopodia helianthoides_ gene list of the published genome:  
@@ -66,7 +71,9 @@ head(assay(vsd), 3)
 
 
 ```{r}
-plotPCA(vsd, intgroup=c("condition", "type"))
+plot <- plotPCA(vsd, intgroup=c("condition", "type"))
+nudge <- position_nudge(y = 4)
+plot + geom_text(aes(label = name), position = nudge)
 ```
 
 That's kind of messy and confusing... 
@@ -74,23 +81,27 @@ That's kind of messy and confusing...
 # Adonis PCA to see if individual treatment and days since exposure interacts with disease sign 
 
 ```{r}
-install.packages("adonis")
+#comment out code 20231219
+#install.packages("vegan")
+```
+
+```{r}
+library(vegan)
+
+help(`adonis2`)
 ```
 
 So based on notes I have from December 4, 2023 Pycno meeting with Alyssa and Melanie, I'm going to: 
+
 All first arm drop ones
 Do they all look the same or different
-NMDS with adonis→ have the grouping be first arm drop, 
-Test whether day interacts with time of disease 
-An ANOVA you can do with an NMDS 
-How does individual treatment and date interact with disease sign 
+
+How does individual treatment (size/age) and date interact with disease sign 
 https://rdrr.io/rforge/vegan/man/adonis.html 
 Response variable treatment by sign of disease by day
 Interactive 
 If that was significant, then that would say there’s a difference in sign of disease 
 If significance, need to to pay attention to date since the exposure rather than the sign 
-
-Treatment in this case is whether the star is an adult or juvenile...? 
  
 | coelom_ID | star_ID | star_size | treatment_grp | experiment_day | disease_sign                        |
 |-----------|---------|-----------|---------------|----------------|-------------------------------------|
@@ -102,5 +113,55 @@ Treatment in this case is whether the star is an adult or juvenile...?
 | PSC 0190  |      10 | large     | exposed       |             11 | FIRST arm dropped                   |
 | PSC 0228  |      61 | small     | exposed       |             14 | 1 arm dropped                       |
 | PSC 0231  |      13 | large     | exposed       |             15 | FIRST arm dropped, 5 arms twisted   |
+
+
+Make a subset countmatrix of just those libraries: 
+```{r}
+adcmatrix <- select(countmatrix, "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
+head(adcmatrix)
+```
+26581 rows, 8 columns
+
+### Make a regular PCA plot first. 
+
+Make a data frame for the comparison: 
+```{r}
+colData <- data.frame(condition=factor(c("day8L","day8L","day10L","day11S","day11S","day11L","day14S","day15L")),
+                      type=factor(rep("paired-end",8)))
+rownames(colData) <- colnames(adcmatrix)
+dds <- DESeqDataSetFromMatrix(countData = adcmatrix,
+                              colData = colData,
+                              design = ~ condition)
+```
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+From [Bioconductor `DESeq2` Vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html):     
+```{r}
+vsd <- vst(dds, blind=FALSE)
+rld <- rlog(dds, blind=FALSE)
+head(assay(vsd), 3)
+```
+```{r}
+plotPCA(vsd, intgroup=c("condition", "type"))
+```
+
+```{r}
+#install.packages("ggfortify")
+```
+
+```{r}
+library(ggfortify)
+
+pca_res <- prcomp(adcmatrix, scale. = TRUE)
+
+autoplot(pca_res, data = adcmatrix, colour = 'Treatment')
+```
+
+
+
 
 

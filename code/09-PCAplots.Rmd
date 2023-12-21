@@ -49,7 +49,7 @@ head(countmatrix)
 
 write out matrix of rounded up integers:
 ```{r}
-write.table(countmatrix, "../analyses/07-kallisto-phelgenome/kallisto-countmatrix-roundedintegers.tsv", row.names = TRUE)
+write.table(countmatrix, "../analyses/07-kallisto-phelgenome/kallisto-countmatrix-roundedintegers.tsv")
 ```
 
 
@@ -264,6 +264,19 @@ installed 2023-12-20
 ```{r}
 #install.packages("markdown")
 ```
+installed 2023-12-20
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("BiocStyle")
+```
+
+```{r}
+library(BiocStyle)
+```
+
+
 
 ```{r}
 library("pcaExplorer")
@@ -277,8 +290,10 @@ Saved the pdf images to analyses/09-PCAplots
 
 
 
+## Try using `pcaExplorer` with all 32 libraries: 
 ```{r}
-BiocManager::install("airway")
+library("pcaExplorer")
+pcaExplorer()
 ```
 
 

@@ -1,0 +1,9 @@
+coelom_ID	star_ID	star_size	treatment_grp	experiment_day	disease_sign	sample_date
+PSC.0149	28	large	exposed	8	first_arm_drop	20220629
+PSC.0150	6	large	exposed	8	first_arm_drop	20220629
+PSC.0174	30	large	exposed	10	first_arm_drop	20220701
+PSC.0187	57	small	exposed	11	first_arm_drop	20220702
+PSC.0188	38	small	exposed	11	first_arm_drop	20220702
+PSC.0190	10	large	exposed	11	first_arm_drop	20220702
+PSC.0228	61	small	exposed	14	first_arm_drop	20220705
+PSC.0231	13	large	exposed	15	first_arm_drop	20220706

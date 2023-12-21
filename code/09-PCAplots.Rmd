@@ -47,6 +47,13 @@ countmatrix <- round(countmatrix, 0)
 head(countmatrix)
 ```
 
+write out matrix of rounded up integers:
+```{r}
+write.table(countmatrix, "../analyses/07-kallisto-phelgenome/kallisto-countmatrix-roundedintegers.tsv", row.names = TRUE)
+```
+
+
+
 Make a data frame for the comparison: 
 ```{r}
 colData <- data.frame(condition=factor(c("day0L", "day0L", "day0L", "day0L", "day0L", "day0L", "day0L", "day0L", "day0S", "day0S", "day0S", "day0S", "day8LA",  "day8LA", "day9LA2", "day10LA", "day11SH", "day11SH", "day11SA", "day11SA", "day11LA", "day12SA", "day12LH", "day12LH", "day12LA2", "day13LH", "day13LA9", "day14SH", "day14SA", "day15SH", "day15LA", "day15SD")),
@@ -121,6 +128,12 @@ adcmatrix <- select(countmatrix, "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0187",
 head(adcmatrix)
 ```
 26581 rows, 8 columns
+
+write out table
+```{r}
+write.table(adcmatrix, "../analyses/07-kallisto-phelgenome/firstarmdrop_counts_rounded.tsv", sep = "\t", row.names = TRUE, quote = FALSE)
+```
+
 
 ### Make a regular PCA plot first. 
 
@@ -247,19 +260,22 @@ BiocManager::install("pcaExplorer")
 BiocManager::install("pcaExplorer", dependencies = TRUE)
 ```
 
+installed 2023-12-20
 ```{r}
-library("pcaExplorer")
-pcaExplorer()
-```
-
-```{r}
-install.packages("markdown")
+#install.packages("markdown")
 ```
 
 ```{r}
 library("pcaExplorer")
 pcaExplorer()
 ```
+The count matrix file is analyses/07-kallisto-phelgenome/firstarmdrop_counts_rounded.tsv
+
+The sample metadata matrix file is data/firstarmdrop_coldata.tsv 
+
+Saved the pdf images to analyses/09-PCAplots
+
+
 
 ```{r}
 BiocManager::install("airway")

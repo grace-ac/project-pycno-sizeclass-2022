@@ -250,15 +250,15 @@ name the first column "Library"
 https://bioconductor.org/packages/release/bioc/vignettes/pcaExplorer/inst/doc/pcaExplorer.html 
 
 https://bioconductor.org/packages/3.18/bioc/vignettes/pcaExplorer/inst/doc/upandrunning.html 
-
+Installed 2023-12-20
 ```{r}
-if (!requireNamespace("BiocManager", quietly=TRUE))
-    install.packages("BiocManager")
-BiocManager::install("pcaExplorer")
+#if (!requireNamespace("BiocManager", quietly=TRUE))
+#    install.packages("BiocManager")
+#BiocManager::install("pcaExplorer")
 ```
 
 ```{r}
-BiocManager::install("pcaExplorer", dependencies = TRUE)
+#BiocManager::install("pcaExplorer", dependencies = TRUE)
 ```
 
 installed 2023-12-20
@@ -267,10 +267,10 @@ installed 2023-12-20
 ```
 installed 2023-12-20
 ```{r}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
 
-BiocManager::install("BiocStyle")
+#BiocManager::install("BiocStyle")
 ```
 
 ```{r}

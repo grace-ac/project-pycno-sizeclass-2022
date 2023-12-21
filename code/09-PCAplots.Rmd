@@ -146,7 +146,9 @@ rld <- rlog(dds, blind=FALSE)
 head(assay(vsd), 3)
 ```
 ```{r}
-plotPCA(vsd, intgroup=c("condition", "type"))
+plotad <- plotPCA(vsd, intgroup=c("condition", "type"))
+nudge <- position_nudge(y = 4)
+plotad + geom_text(aes(label = name), position = nudge)
 ```
 
 ## Try using `adonis2` to make plot comparing RNAseq data - see if age/size of pycno (large or small) and days since exposure impacts the disease sign (arm drop) 
@@ -163,71 +165,109 @@ head(dfadcmatrix)
 make first column a no-named column:
 https://stackoverflow.com/questions/53493342/remove-the-first-column-name-in-a-data-frame-from-fread-in-r 
 ```{r}
-names(dfadcmatrix)[1] <- ""
-head(dfadcmatrix)
+#names(dfadcmatrix)[1] <- ""
+#head(dfadcmatrix)
 ```
 
 
 ```{r}
-tadcmatrix <- transpose(dfadcmatrix)
-head(tadcmatrix)
+#tadcmatrix <- transpose(dfadcmatrix)
+#head(tadcmatrix)
 ```
 
 then make the first row into the column names: 
 ```{r}
-names(tadcmatrix) <- tadcmatrix[1,]
+#names(tadcmatrix) <- tadcmatrix[1,]
 ```
 
 ```{r}
-tadcmatrix <- tadcmatrix[-1,]
-head(tadcmatrix)
+#tadcmatrix <- tadcmatrix[-1,]
+#head(tadcmatrix)
 ```
 
 then make the row names back into the library names: 
 PCA.0149; PCA.0150; PCA.0174; PCA.0187; PCA.0188; PCA.0190; PCA.0228; PCA.0231
 
 ```{r}
-rownames(tadcmatrix) <- c("PCA.0149", "PCA.0150", "PCA.0174", "PCA.0187", "PCA.0188", "PCA.0190", "PCA.0228", "PCA.0231")
-head(tadcmatrix)
+#rownames(tadcmatrix) <- c("PCA.0149", "PCA.0150", "PCA.0174", "PCA.0187", "PCA.0188", "PCA.0190", "PCA.0228", "PCA.0231")
+#head(tadcmatrix)
 ```
 
 name the first column "Library"
 ```{r}
-library(tibble)
-tadcmatrix <- tibble::rownames_to_column(tadcmatrix, "Library")
-head(tadcmatrix)
+#library(tibble)
+#tadcmatrix <- tibble::rownames_to_column(tadcmatrix, "Library")
+#head(tadcmatrix)
 ```
 
 
 ```{r}
-adonis2(adcmatrix ~ )
+#adonis2(adcmatrix ~ )
 ```
 
 
 ```{r}
-armdrop.pca <- prcomp(adcmatrix, 
+#armdrop.pca <- prcomp(adcmatrix, 
                    center = TRUE, 
                    scale. = TRUE) 
   
 # summary of the  
 # prcomp object 
-summary(armdrop.pca)
+#summary(armdrop.pca)
 ```
 # structure of the pca object 
 ```{r}
-str(armdrop.pca) 
+#str(armdrop.pca) 
 ```
 
 
 # loading library 
 ```{r}
-library(ggfortify) 
-
-armdrop.pca.plot <- autoplot(armdrop.pca, 
-                          data = tadcmatrix,
-                          colour = 'Library') 
+#library(ggfortify) 
+#?autoplot
+#armdrop.pca.plot <- autoplot(armdrop.pca, 
+                          #data = adcmatrix,
+                          #colour = 'Library') 
   
-armdrop.pca.plot
+#armdrop.pca.plot
 ```
+
+# Try using `pcaExplorer` from BioConductor
+https://bioconductor.org/packages/release/bioc/vignettes/pcaExplorer/inst/doc/pcaExplorer.html 
+
+https://bioconductor.org/packages/3.18/bioc/vignettes/pcaExplorer/inst/doc/upandrunning.html 
+
+```{r}
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("pcaExplorer")
+```
+
+```{r}
+BiocManager::install("pcaExplorer", dependencies = TRUE)
+```
+
+```{r}
+#library("pcaExplorer")
+#pcaExplorer()
+```
+
+```{r}
+install.packages("rmarkdown", repos = "https://cran.revolutionanalytics.com")
+```
+
+```{r}
+library("pcaExplorer")
+pcaExplorer()
+```
+
+```{r}
+BiocManager::install("airway")
+```
+
+
+
+
+
 
 

@@ -47,9 +47,10 @@ countmatrix <- round(countmatrix, 0)
 head(countmatrix)
 ```
 
-write out matrix of rounded up integers:
+write out matrix of rounded up integers: 
+Wrote out 2023-12-20 1800pm
 ```{r}
-write.table(countmatrix, "../analyses/07-kallisto-phelgenome/kallisto-countmatrix-roundedintegers.tsv")
+#write.table(countmatrix, "../analyses/07-kallisto-phelgenome/32libraries_counts_rounded.tsv", sep = "\t", row.names = TRUE, quote = FALSE)
 ```
 
 
@@ -297,7 +298,11 @@ pcaExplorer()
 ```
 
 
+input files: 
+count matrix file: analyses/07-kallisto-phelgenome/32libraries_counts_rounded.tsv
+metadata matrix: data/summer2022_coldata.tsv
 
+save pdf images and report to: analyses/09-PCAplots
 
 
 

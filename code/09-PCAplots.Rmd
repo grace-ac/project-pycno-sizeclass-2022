@@ -248,12 +248,12 @@ BiocManager::install("pcaExplorer", dependencies = TRUE)
 ```
 
 ```{r}
-#library("pcaExplorer")
-#pcaExplorer()
+library("pcaExplorer")
+pcaExplorer()
 ```
 
 ```{r}
-install.packages("rmarkdown", repos = "https://cran.revolutionanalytics.com")
+install.packages("markdown")
 ```
 
 ```{r}

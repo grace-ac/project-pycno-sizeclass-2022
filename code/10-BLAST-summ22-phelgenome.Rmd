@@ -3,5 +3,9 @@ title: "10-BLAST-summ22_phelgenome"
 output: html_document
 date: "2023-12-22"
 ---
-Rmd to perform BLAST with the Summer 2022 _Pycnopodia helianthoides_ RNAseq count matrix against the published _Pycnopodia helianthoides_ genome. 
+Rmd to perform BLAST with the _Pycnopodia helianthoides_ genome gene list against the published _Pycnopodia helianthoides_ genome. 
+
+Genome gene list: `project-pycno-sizeclass-2022/data/augustus.hints.codingseq`
+
+
 

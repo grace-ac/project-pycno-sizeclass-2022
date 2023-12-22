@@ -304,6 +304,24 @@ metadata matrix: data/summer2022_coldata.tsv
 
 save pdf images and report to: analyses/09-PCAplots
 
+## play with the airway data from `pcaExplorer` to see if i can figure out how to format my data to make a multifactor comparison
+
+```{r}
+BiocManager::install("airway")
+```
+
+```{r}
+library("pcaExplorer")
+pcaExplorer()
+```
+
+comment out 2023-12-21 because has been installed
+```{r}
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+#BiocManager::install("org.Hs.eg.db")
+```
 
 
 

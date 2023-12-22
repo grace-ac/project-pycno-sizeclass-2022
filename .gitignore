@@ -4,3 +4,4 @@
 .Ruserdata
 .DS_Store
 data/interproscan.tsv
+protocols/RNA-extraction-protocol.md

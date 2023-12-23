@@ -33,12 +33,44 @@ cd -
 pwd
 ```
 
+note: couldn't figure out syntax errors in code chunk below, so I used `rsync` to transfer the database directory I made locally into `/home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/analyses/10-BLAST`
+```{python}
+#!/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+#-in ../analyses/10-BLAST/uniprot_sprot_r2021_03.fasta \
+#-dbtype prot \
+#-out ../analyses/10-BLAST/analyses/10-BLAST/uniprot_sprot_r2021_03
+```
+
+# Get a Query Sequence
+```{bash}
+pwd
+```
+
+`rsync` the data/augustus.hints.codingseq to the raven code directory. 
+
 
 ```{python}
-!/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
--in ../analyses/10-BLAST/uniprot_sprot_r2021_03.fasta \
--dbtype prot \
--out ../analyses/10-BLAST/analyses/10-BLAST/uniprot_sprot_r2021_03
+#how many sequences? lets count ">" as we know each contig has 1
+!grep -c ">" augustus.hints.codingseq
 ```
+
+# Run BLAST
+
+```{bash}
+pwd
+```
+
+
+```{python}
+!/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+-query augustus.hints.codingseq \
+-db ../analyses/10-BLAST/blast/uniprot_sprot_r2021_03 \
+-out ../analyses/10-BLAST/summer2022-uniprot_blastx.tab \
+-evalue 1E-20 \
+-num_threads 8 \
+-max_target_seqs 1 \
+-outfmt 6
+```
+
 
 

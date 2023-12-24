@@ -95,29 +95,10 @@ code from: https://sr320.github.io/tumbling-oysters/posts/sr320-04-mytgo/index.h
 -outfmt 6
 ```
 
-/home/shared/ncbi-blast-2.11.0+/bin/blastx \
--query ../data/Mtros-hq_transcripts.fasta \
--db ../analyses/blast/uniprot_sprot_r2023_02 \
--out ../analyses/blast/Mtros-hq-uniprot_blastx.tab \
--evalue 1E-20 \
--num_threads 40 \
--max_target_seqs 1 \
--max_hsps 1 \
--outfmt 6
+```{bash}
+head -2 ../analyses/10-BLAST/summer2022-uniprot_blastx.tab
+```
 
 
-# Paths to programs
-blast_dir="/gscratch/srlab/programs/ncbi-blast-2.8.1+/bin"
-blastx="${blast_dir}/blastx"
-
-# Run blastp
-${blastp} \
--query ${maker_p_fasta} \
--db ${uniprot_db} \
--out ${output} \
--max_target_seqs 1 \
--evalue 1e-6 \
--outfmt 6 \
--num_threads 28
 
 

@@ -34,11 +34,16 @@ pwd
 ```
 
 note: couldn't figure out syntax errors in code chunk below, so I used `rsync` to transfer the database directory I made locally into `/home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/analyses/10-BLAST`
-```{python}
-#!/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
-#-in ../analyses/10-BLAST/uniprot_sprot_r2021_03.fasta \
-#-dbtype prot \
-#-out ../analyses/10-BLAST/analyses/10-BLAST/uniprot_sprot_r2021_03
+```{bash}
+makeblast_db="/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb"
+```
+
+
+```{bash}
+$makeblast_db \
+-in ../analyses/10-BLAST/uniprot_sprot_r2021_03.fasta \
+-dbtype prot \
+-out ../analyses/10-BLAST/analyses/10-BLAST/uniprot_sprot_r2021_03
 ```
 
 # Get a Query Sequence
@@ -61,16 +66,58 @@ pwd
 ```
 
 
-```{python}
-!/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+Set paths to programs:
+```{bash}
+blast_dir="/home/shared/ncbi-blast-2.15.0+/bin"
+blastx="${blast_dir}/blastx"
+```
+
+Set paths to files:
+```{bash}
+genome_fasta="/home/shared/8TB_HDD_02/graceac9/GitHub/project-pycno-sizeclass-2022/code/augustus.hints.codingseq"
+sp_db=""
+```
+
+```{bash}
+pwd
+```
+
+code from: https://sr320.github.io/tumbling-oysters/posts/sr320-04-mytgo/index.html 
+
+```{bash}
+/home/shared/ncbi-blast-2.15.0+/bin/blastx \
 -query augustus.hints.codingseq \
 -db ../analyses/10-BLAST/blast/uniprot_sprot_r2021_03 \
 -out ../analyses/10-BLAST/summer2022-uniprot_blastx.tab \
 -evalue 1E-20 \
--num_threads 8 \
+-num_threads 40 \
 -max_target_seqs 1 \
 -outfmt 6
 ```
 
+/home/shared/ncbi-blast-2.11.0+/bin/blastx \
+-query ../data/Mtros-hq_transcripts.fasta \
+-db ../analyses/blast/uniprot_sprot_r2023_02 \
+-out ../analyses/blast/Mtros-hq-uniprot_blastx.tab \
+-evalue 1E-20 \
+-num_threads 40 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+
+
+# Paths to programs
+blast_dir="/gscratch/srlab/programs/ncbi-blast-2.8.1+/bin"
+blastx="${blast_dir}/blastx"
+
+# Run blastp
+${blastp} \
+-query ${maker_p_fasta} \
+-db ${uniprot_db} \
+-out ${output} \
+-max_target_seqs 1 \
+-evalue 1e-6 \
+-outfmt 6 \
+-num_threads 28
 
 

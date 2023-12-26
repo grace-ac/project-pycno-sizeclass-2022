@@ -289,6 +289,13 @@ The sample metadata matrix file is data/firstarmdrop_coldata.tsv
 
 Saved the pdf images to analyses/09-PCAplots
 
+2023-12-26    
+I ran BLAST with the phel genome gene list against uniprot (Rmd ran on Raven: https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/code/10-BLAST-summ22-phelgenome_raven.Rmd) and output: https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/analyses/10-BLAST/summer2022-uniprot_blastx.tab 
+
+To use the gene annotation function in `pcaExplorer`, I want the a gene list htat is the gene ID (example: g3453.t1), and it's gene name (example: CP46A_HUMAN). So I need to adjust the blast output file to create that gene annotation file. 
+
+
+
 
 
 ## Try using `pcaExplorer` with all 32 libraries: 
@@ -307,7 +314,7 @@ save pdf images and report to: analyses/09-PCAplots
 ## play with the airway data from `pcaExplorer` to see if i can figure out how to format my data to make a multifactor comparison
 
 ```{r}
-BiocManager::install("airway")
+#BiocManager::install("airway")
 ```
 
 ```{r}

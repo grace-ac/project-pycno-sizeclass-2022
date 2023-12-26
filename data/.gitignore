@@ -1,3 +1,6 @@
 GCA_032158295.1_ASM3215829v1_genomic.fna
 *fq.gz
 interproscan.gff3
+uniprot_sprot.fasta.gz
+uniprot_sprot_r2023_05.fasta.gz
+uniprot_sprot_r2023_05.fasta

@@ -148,12 +148,24 @@ abline(h=c(-1,1), col="blue")
 
 # Compare the libraries of stars sampled at arm drop, taking into account age/size, and days since exposure (experiment day)
 
+| Library  | Star_Size | Experiment Day (Days since Exposure to SSWD) |
+|----------|-----------|----------------------------------------------|
+| PSC 0149 |     large | 8                                            |
+| PSC 0150 |     large | 8                                            |
+| PSC 0174 |     large | 10                                           |
+| PSC 0187 |     small | 11                                           |
+| PSC 0188 |     small | 11                                           |
+| PSC 0190 |     large | 11                                           |
+| PSC 0228 |     small | 14                                           |
+| PSC 0231 |     large | 15                                           |
+
+
 ```{r}
 armdrop <- select(countmatrix, "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
 head(armdrop)
 ```
 
-Create a dataframe to help get DEGs based on difference in age/size and taking experimental day into account: 
+Create a dataframe to get DEGs based on difference in age/size and taking experimental day into account: 
 ```{r}
 colData <- data.frame(condition=factor(c("large", "large", "large", "small", "small", "large", "small", "large")), 
                              type=factor(rep("paired-end", 8)),
@@ -203,6 +215,50 @@ points(armdrop_day_size.sig$baseMean, armdrop_day_size.sig$log2FoldChange, pch=2
 # 2 FC lines
 abline(h=c(-1,1), col="blue")
 ```
+
+Get list of those 122 DEGs and write out to analyses for DESeq2:
+Wrote out 2023-12-26. 
+```{r}
+#write.table(armdrop_day_size.sig, "../analyses/08-deseq2/DEGlist_armdrop8_with_size_and_expday.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+
+
+A **contrast** is a linear combination of estimated log2 fold changes. Can be used to test if differences between groups are equal to zero.         
+```{r}
+resultsNames(dds)
+```
+
+```{r}
+resSize <- results(dds,
+                          contrast = c("condition", "small",  "large"))
+head(resSize)
+```
+
+```{r}
+sizecontrast <- resSize
+# The main plot
+plot(sizecontrast$baseMean, sizecontrast$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     #main="Infection Status  (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+sizecontrast.sig <- resSize[!is.na(resSize$padj) & resSize$padj <= 0.05, ]
+points(sizecontrast.sig$baseMean, sizecontrast.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(resSize[!is.na(resSize$padj) & resSize$padj <= 0.05, ])
+```
+519 DEGs influenced by size that are something something 
+```{r}
+summary(resSize)
+```
+
+
+
+
 
 
 

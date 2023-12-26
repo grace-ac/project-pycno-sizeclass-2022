@@ -287,7 +287,44 @@ The count matrix file is analyses/07-kallisto-phelgenome/firstarmdrop_counts_rou
 
 The sample metadata matrix file is data/firstarmdrop_coldata.tsv 
 
+gene annotation: analyses/09-PCAplots/genelist_annotated.tab
+
 Saved the pdf images to analyses/09-PCAplots
+
+2023-12-26    
+I ran BLAST with the phel genome gene list against uniprot (Rmd ran on Raven: https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/code/10-BLAST-summ22-phelgenome_raven.Rmd) and output: https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/analyses/10-BLAST/summer2022-uniprot_blastx.tab 
+
+To use the gene annotation function in `pcaExplorer`, I want the a gene list htat is the gene ID (example: g3453.t1), and it's gene name (example: CP46A_HUMAN). So I need to adjust the blast output file to create that gene annotation file. 
+
+Read in the blast output file: 
+```{r}
+blastout <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx.tab", header = FALSE)
+head(blastout)
+```
+
+I also have a tab separataed version (separated by doing text to column in excel): 
+```{r}
+blastsep <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx_sep.tab", header = FALSE)
+head(blastsep)
+```
+
+Create a gene annotation file of just one column of gene IDs, and associated gene name (column V4 in separated blast output file):
+```{r}
+genelistannot <- select(blastsep, "V1", "V4")
+head(genelistannot)
+```
+
+Rename columns:
+```{r}
+colnames(genelistannot) <- c("geneID", "geneName")
+head(genelistannot)
+```
+write out into analyses/09-PCAplots:
+```{r}
+write.table(genelistannot, "../analyses/09-PCAplots/genelist_annotated.tab", sep = "\t", quote = FALSE, row.names = FALSE)
+```
+
+
 
 
 
@@ -307,7 +344,7 @@ save pdf images and report to: analyses/09-PCAplots
 ## play with the airway data from `pcaExplorer` to see if i can figure out how to format my data to make a multifactor comparison
 
 ```{r}
-BiocManager::install("airway")
+#BiocManager::install("airway")
 ```
 
 ```{r}

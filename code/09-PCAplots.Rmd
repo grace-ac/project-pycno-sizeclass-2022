@@ -294,6 +294,34 @@ I ran BLAST with the phel genome gene list against uniprot (Rmd ran on Raven: ht
 
 To use the gene annotation function in `pcaExplorer`, I want the a gene list htat is the gene ID (example: g3453.t1), and it's gene name (example: CP46A_HUMAN). So I need to adjust the blast output file to create that gene annotation file. 
 
+Read in the blast output file: 
+```{r}
+blastout <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx.tab", header = FALSE)
+head(blastout)
+```
+
+I also have a tab separataed version (separated by doing text to column in excel): 
+```{r}
+blastsep <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx_sep.tab", header = FALSE)
+head(blastsep)
+```
+
+Create a gene annotation file of just one column of gene IDs, and associated gene name (column V4 in separated blast output file):
+```{r}
+genelistannot <- select(blastsep, "V1", "V4")
+head(genelistannot)
+```
+
+Rename columns:
+```{r}
+colnames(genelistannot) <- c("geneID", "geneName")
+head(genelistannot)
+```
+write out into analyses/09-PCAplots:
+```{r}
+write.table(genelistannot, "../analyses/09-PCAplots/genelist_annotated.tab", sep = "\t", quote = FALSE)
+```
+
 
 
 

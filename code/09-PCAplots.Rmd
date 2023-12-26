@@ -287,6 +287,8 @@ The count matrix file is analyses/07-kallisto-phelgenome/firstarmdrop_counts_rou
 
 The sample metadata matrix file is data/firstarmdrop_coldata.tsv 
 
+gene annotation: analyses/09-PCAplots/genelist_annotated.tab
+
 Saved the pdf images to analyses/09-PCAplots
 
 2023-12-26    
@@ -319,7 +321,7 @@ head(genelistannot)
 ```
 write out into analyses/09-PCAplots:
 ```{r}
-write.table(genelistannot, "../analyses/09-PCAplots/genelist_annotated.tab", sep = "\t", quote = FALSE)
+write.table(genelistannot, "../analyses/09-PCAplots/genelist_annotated.tab", sep = "\t", quote = FALSE, row.names = FALSE)
 ```
 
 

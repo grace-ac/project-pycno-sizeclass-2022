@@ -632,14 +632,23 @@ pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FAL
 Annotate heatmap with healthy or sick:
 Add column annotations for the samples denoting temperature treatment and infection status:
 ```{r}
-sample_col <- data.frame(size = c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop"))
+sample_col <- data.frame(diseasesign = c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop"))
 row.names(sample_col) <-colnames(nozerodegheatmap)
 sample_col
 ```
+add annotation for star size:
+```{r}
+sample_col$star.size <- c("small", "large", "large", "large", "large", "small", "small", "large", "large", "large", "small", "small", "large", "small", "large")
+sample_col
+```
+
+
+
 specify colors for annotation columns:
 ```{r}
 my_colors <- list(
-  treatment = c(control = "cyan3", exposed = "coral3")
+  treatment = c(control = "cyan3", exposed = "coral3"),
+  star.size = c(large = "#AF2CEC", small = "#2C75EC")
 )
 ```
 

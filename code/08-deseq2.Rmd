@@ -216,12 +216,43 @@ points(armdrop_day_size.sig$baseMean, armdrop_day_size.sig$log2FoldChange, pch=2
 abline(h=c(-1,1), col="blue")
 ```
 
+
+
 Get list of those 122 DEGs and write out to analyses for DESeq2:
 Wrote out 2023-12-26. 
 ```{r}
 #write.table(armdrop_day_size.sig, "../analyses/08-deseq2/DEGlist_armdrop8_with_size_and_expday.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
 ```
 
+# `join` deg lists with library counts
+load the DEGlist_armdrop8_with_size_and_expday.tab
+```{r}
+deglist <- read.delim("../analyses/08-deseq2/DEGlist_armdrop8_with_size_and_expday.tab")
+head(deglist)
+```
+
+`join` with the count data from the libraries i compared:
+make row names for both files into a column called "gene"
+```{r}
+armdropnorownames <- rownames_to_column(armdrop, var = "gene")
+head(armdropnorownames)
+```
+
+```{r}
+deglist <- rownames_to_column(deglist, var = "gene")
+head(deglist)
+```
+
+```{r}
+deglistcount <- left_join(deglist, armdropnorownames, by = "gene")
+head(deglistcount)
+```
+
+Write out the file:
+```{r}
+#write.table(deglistcount, "../analyses/08-deseq2/DEGlist_armdrop8_with_size_and_expday_genecounts.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+wrote out 20231227
 
 A **contrast** is a linear combination of estimated log2 fold changes. Can be used to test if differences between groups are equal to zero.         
 ```{r}

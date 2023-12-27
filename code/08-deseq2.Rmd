@@ -424,11 +424,141 @@ head(deglistcount)
 
 Write out the file:
 ```{r}
-write.table(deglistcount, "../analyses/08-deseq2/DEGlist_armdrop8_with_size_genecounts.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+#write.table(deglistcount, "../analyses/08-deseq2/DEGlist_armdrop8_with_size_genecounts.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
 ```
 Wrote out 20231227
 
+# MAKE HEATMAP
+Load in packages:
+```{r}
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+```
 
+Set heatmap colors:
+```{r}
+heatmapPurpleOrange <- RColorBrewer::brewer.pal(11, "PuOr")
+```
+
+Set `gene` column as rownames:
+```{r}
+rownames(deglistcount) <- deglistcount$gene #set gene IDs as rownames
+degheatmap <- deglistcount[,-1] #remove redundant column
+head(degheatmap)
+```
+
+Pull out just the sample count data:
+```{r}
+degheatmap <- select(degheatmap, "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
+head(degheatmap)
+```
+
+Going to remove all rows that have "0" for all samples: 
+```{r}
+nozerodegheatmap <- degheatmap[rowSums(degheatmap[, -1] >0) !=0, ]
+head(nozerodegheatmap)
+```
+Shouldn't lose any rows because this list is of the 112 DEGs of the 8 libraries at arm drop, taking into account star size/age and experimental day 
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 15, fontsize_row = 12)
+```
+
+Annotate heatmap with large or small:
+Add column annotations for the samples denoting temperature treatment and infection status:
+```{r}
+sample_col <- data.frame(size = c("large", "large", "large", "small", "small", "large", "small", "large"))
+row.names(sample_col) <-colnames(nozerodegheatmap)
+sample_col
+```
+specify colors for annotation columns:
+```{r}
+my_colors <- list(
+  treatment = c(control = "cyan3", exposed = "coral3")
+)
+```
+
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", annotation_colors = my_colors, annotation_col = sample_col, show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 12, fontsize_row = 12)
+```
+
+
+# For SICB: Compare Control vs Arm Drop (only looking at libraries from Day 8-15) 
+
+**Clear environment**
+Re-read in the countmatrix and round the integers. 
+
+
+coelom_ID	star_size	experiment_day	disease_sign	star_ID
+PSC.0149	large	                8	first_arm_drop	28
+PSC.0150	large	                8	first_arm_drop	6
+PSC.0174	large	                10	first_arm_drop	30
+PSC.0177	small	                11	healthy	34
+PSC.0186	large	                11	healthy	15
+PSC.0187	small	                11	first_arm_drop	57
+PSC.0188	small	                11	first_arm_drop	38
+PSC.0190	large           	11	first_arm_drop	10
+PSC.0202	large           	12	healthy	4
+PSC.0203	large           	12	healthy	31
+PSC.0209	large           	13	healthy	9
+PSC.0219	small           	14	healthy	63
+PSC.0228	small	                14	first_arm_drop	61
+PSC.0230	small	                15	healthy	65
+PSC.0231	large	                15	first_arm_drop	13
+
+Subset the above libraries:
+```{r}
+#control (con) vs armdrop (ad)
+convad <- select(countmatrix, "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0177", "PSC.0186", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0202", "PSC.0203", "PSC.0209", "PSC.0219", "PSC.0228", "PSC.0230", "PSC.0231")
+head(convad)
+```
+
+Get DEGs comparing the two groups - control vs first arm drop. 
+
+```{r}
+colData <- data.frame(condition=factor(c("firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "healthy", "healthy", "firstarmdrop", "healthy", "firstarmdrop")), 
+                             type=factor(rep("paired-end", 15)))
+rownames(colData) <- colnames(convad)
+dds <- DESeqDataSetFromMatrix(countData = convad,
+                                     colData = colData, 
+                                     design = ~ condition)
+```
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+```{r}
+head(res)
+```
+
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+```{r}
+control_v_armdrop_fig <- res
+# The main plot
+plot(control_v_armdrop_fig$baseMean, control_v_armdrop_fig$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main="SSWD Exposure Status Healthy (Control) vs Exposed (Arm Drop) (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+control_v_armdrop_fig.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(control_v_armdrop_fig.sig$baseMean, control_v_armdrop_fig.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+
+Write out list of those 6441 DEGs:
+Wrote out 2023-12-27. 
+```{r}
+#write.table(control_v_armdrop_fig.sig, "../analyses/08-deseq2/DEGlist_control_v_armdrop.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
 
 
 

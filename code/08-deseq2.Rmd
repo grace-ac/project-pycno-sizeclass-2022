@@ -680,4 +680,69 @@ write out the blast annotated file:
 ```
 wrote out 20231227
 
+# compare first vs second arm drop:
+coelom_ID	star_size	experiment_day	disease_sign	star_ID
+PSC.0149	large	                8	first_arm_drop	28
+PSC.0150	large           	8	first_arm_drop	6
+PSC.0174	large           	10	first_arm_drop	30
+PSC.0188	small           	11	first_arm_drop	38
+PSC.0228	small           	14	first_arm_drop	61
+PSC.0156	large           	9	second_arm_drop	28
+PSC.0198	small           	12	second_arm_drop	38
+PSC.0206	large           	12	second_arm_drop	30
+PSC.0217	large           	13	second_arm_drop	6
+PSC.0235	small           	15	second_arm_drop	61
+
+```{r}
+fvsad <- select(countmatrix, "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0188", "PSC.0228", "PSC.0156", "PSC.0198", "PSC.0206", "PSC.0217", "PSC.0235")
+head(fvsad)
+```
+
+Create a dataframe to get DEGs based on FIRST VS SECOND ARM DROP: 
+```{r}
+colData <- data.frame(condition=factor(c("firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "secondarmdrop", "secondarmdrop", "secondarmdrop", "secondarmdrop", "secondarmdrop")), 
+                             type=factor(rep("paired-end", 10)))
+rownames(colData) <- colnames(fvsad)
+dds <- DESeqDataSetFromMatrix(countData = fvsad,
+                                     colData = colData, 
+                                     design = ~ condition)
+```
+
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+
+```{r}
+head(res)
+```
+
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+only 3 DEGs??? 
+
+```{r}
+firstvssecondarmdrop <- res
+# The main plot
+plot(firstvssecondarmdrop$baseMean, firstvssecondarmdrop$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main="First Arm Drop VS Second Arm Drop (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+firstvssecondarmdrop.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(firstvssecondarmdrop.sig$baseMean, firstvssecondarmdrop.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+
+Get list of those 3 DEGs and write out to analyses for DESeq2:
+Wrote out 2023-12-27. 
+```{r}
+#write.table(firstvssecondarmdrop.sig, "../analyses/08-deseq2/DEGlist_firstarmdrop_vs_secondarmdrop.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+
+
 

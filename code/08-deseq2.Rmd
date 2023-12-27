@@ -560,5 +560,35 @@ Wrote out 2023-12-27.
 #write.table(control_v_armdrop_fig.sig, "../analyses/08-deseq2/DEGlist_control_v_armdrop.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
 ```
 
+# `join` deg lists with library counts
+load the `../analyses/08-deseq2/DEGlist_control_v_armdrop.tab`
+```{r}
+deglist <- read.delim("../analyses/08-deseq2/DEGlist_control_v_armdrop.tab")
+head(deglist)
+```
+
+`join` with the count data from the libraries i compared:
+make row names for both files into a column called "gene"
+```{r}
+convadrownames <- rownames_to_column(convad, var = "gene")
+head(convadrownames)
+```
+
+```{r}
+deglist <- rownames_to_column(deglist, var = "gene")
+head(deglist)
+```
+
+```{r}
+deglistcount <- left_join(deglist, convadrownames, by = "gene")
+head(deglistcount)
+```
+
+Write out the file:
+```{r}
+#write.table(deglistcount, "../analyses/08-deseq2/DEGlist_control_v_armdrop_genecounts.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+wrote out 20231227
+
 
 

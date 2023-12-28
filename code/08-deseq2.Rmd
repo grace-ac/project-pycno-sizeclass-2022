@@ -884,3 +884,6 @@ add eximperiment day info:
 sample_col$experiment.day <- c("day8", "day8", "day10", "day11", "day14", "day9", "day12", "day12", "day13", "day15")
 sample_col
 ```
+
+# Try comparison between 8 control vs 8 arm drop, taking star size/age into account
+

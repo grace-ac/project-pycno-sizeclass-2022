@@ -801,6 +801,100 @@ write out the blast annotated file:
 ```
 wrote out 20231227
 
+# MAKE HEATMAP
+Load in packages:
+```{r}
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+```
+
+Set heatmap colors:
+```{r}
+heatmapPurpleOrange <- RColorBrewer::brewer.pal(11, "PuOr")
+```
+
+Set `gene` column as rownames:
+```{r}
+rownames(deglistcount) <- deglistcount$gene #set gene IDs as rownames
+degheatmap <- deglistcount[,-1] #remove redundant column
+head(degheatmap)
+```
+Pull out just the sample count data in order of star size:
+```{r}
+degheatmap <- select(degheatmap, "PSC.0177", "PSC.0186", "PSC.0202", "PSC.0203", "PSC.0209", "PSC.0219", "PSC.0230", "PSC.0149", "PSC.0150", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
+head(degheatmap)
+```
+
+Going to remove all rows that have "0" for all samples: 
+```{r}
+nozerodegheatmap <- degheatmap[rowSums(degheatmap[, -1] >0) !=0, ]
+head(nozerodegheatmap)
+```
+should be 79 rows
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 15, fontsize_row = 12)
+```
+annotate with disease size and star size:
+```{r}
+sample_col <- data.frame(star.size = c("small", "large", "large", "large", "large", "large", "small", "large", "large", "large", "small", "small", "large", "small", "large"))
+row.names(sample_col) <-colnames(nozerodegheatmap)
+sample_col
+```
+add annotation for star size:
+```{r}
+sample_col$disease.sign <- c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop")
+sample_col
+```
+specify colors for annotation columns:
+```{r}
+my_colors <- list(
+  treatment = c(control = "cyan3", exposed = "coral3"),
+  star.size = c(large = "#AF2CEC", small = "#2C75EC")
+)
+```
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", annotation_colors = my_colors, annotation_col = sample_col, show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 12, fontsize_row = 12)
+```
+
+## try contrast thing
+In the multifactor section of the `DESeq2` manual:                
+The contrast argument of the function _results_ needs a character vector of three componenets: the name of the variable (in this case "temperature"), and the name of the factor level for the numerator of the log2 ratio (elevated) and the denominator (decreased) 
+
+A **contrast** is a linear combination of estimated log2 fold changes. Can be used to test if differences between groups are equal to zero.         
+```{r}
+resultsNames(dds)
+```
+
+```{r}
+resSize <- results(dds,
+                          contrast = c("size", "large",  "small"))
+head(resSize)
+```
+```{r}
+convadsize <- resSize
+# The main plot
+plot(convadsize$baseMean, convadsize$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main= "Contrast Control vs Arm Drop Taking Size into Account  (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+convadsize.sig <- resSize[!is.na(resSize$padj) & resSize$padj <= 0.05, ]
+points(convadsize.sig$baseMean, convadsize.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(convadsize.sig[!is.na(convadsize.sig$padj) & convadsize.sig$padj <= 0.05, ])
+```
+it's the same as above. so i'm leaving it at that. 
+
+
 # compare first vs second arm drop:
 coelom_ID	star_size	experiment_day	disease_sign	star_ID
 PSC.0149	large	                8	first_arm_drop	28

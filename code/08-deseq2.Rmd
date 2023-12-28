@@ -689,6 +689,71 @@ write out the blast annotated file:
 ```
 wrote out 20231227
 
+## Now see if size/age of star has an impact on this:
+Code based on the Multi-factor design section of the manual:        http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs 
+
+```{r}
+colData <- data.frame(condition=factor(c("firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "healthy", "healthy", "firstarmdrop", "healthy", "firstarmdrop")), 
+                             type=factor(rep("paired-end", 15)),
+                             size=factor(c("large", "large", "large", "small", "large", "small", "small", "large", "large", "large", "large", "small", "small", "small", "large")))
+rownames(colData) <- colnames(convad)
+dds <- DESeqDataSetFromMatrix(countData = convad,
+                                     colData = colData, 
+                                     design = ~ condition + size)
+```
+```{r}
+colData <- data.frame(condition=factor(c("firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "healthy", "healthy", "firstarmdrop", "healthy", "firstarmdrop")),
+                             type=factor(rep("paired-end", 15)),
+                             size=factor(c("large", "large", "large", "small", "large", "small", "small", "large", "large", "large", "large", "small", "small", "small", "large")))
+head(colData)
+
+```
+Check levels of temperature and condition (infection status)
+```{r}
+levels(dds$size)
+```
+
+```{r}
+levels(dds$condition)
+```
+
+The following will pull the results from `size` (large or small) because that is our variable of interest. This tells us how size/age contributes to the infection DEGs
+```{r}
+design(dds) <- formula(~ condition + size)
+dds <- DESeq(dds)
+```
+Access results:
+```{r}
+res <- results(dds)
+head(res)
+```
+
+```{r}
+summary(res)
+```
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+```{r}
+sizeconvad <- res
+# The main plot
+plot(sizeconvad$baseMean, sizeconvad$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main= "Control vs Arm Drop Stars Taking Size into Accoun  (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+sizeconvad.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(sizeconvad.sig$baseMean, sizeconvad.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+
+```{r}
+#write.table(sizeconvad.sig, "../analyses/08-deseq2/DEGlist_control_v_armdrop_andsize", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+Wrote out table 20231227. Commented out code
+
 # compare first vs second arm drop:
 coelom_ID	star_size	experiment_day	disease_sign	star_ID
 PSC.0149	large	                8	first_arm_drop	28
@@ -885,5 +950,8 @@ sample_col$experiment.day <- c("day8", "day8", "day10", "day11", "day14", "day9"
 sample_col
 ```
 
-# Try comparison between 8 control vs 8 arm drop, taking star size/age into account
+
+
+
+
 

@@ -319,6 +319,49 @@ write out the blast annotated file:
 ```
 wrote out 20231228
 
+# MAKE HEATMAP
+Load in packages:
+```{r}
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+```
+
+Set heatmap colors:
+```{r}
+heatmapPurpleOrange <- RColorBrewer::brewer.pal(11, "PuOr")
+```
+
+Set `gene` column as rownames:
+```{r}
+rownames(deglistcount) <- deglistcount$gene #set gene IDs as rownames
+degheatmap <- deglistcount[,-1] #remove redundant column
+head(degheatmap)
+```
+
+Pull out just the sample count data in order of star size:
+```{r}
+degheatmap <- select(degheatmap, "PSC.0177", "PSC.0186", "PSC.0202", "PSC.0203", "PSC.0209", "PSC.0219", "PSC.0230", "PSC.0149", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
+head(degheatmap)
+```
+
+Going to remove all rows that have "0" for all samples: 
+```{r}
+nozerodegheatmap <- degheatmap[rowSums(degheatmap[, -1] >0) !=0, ]
+head(nozerodegheatmap)
+```
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 15, fontsize_row = 12)
+```
+
+
+
+
+
+
+
 
 
 

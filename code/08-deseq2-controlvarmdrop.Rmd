@@ -108,7 +108,7 @@ Wrote out 2023-12-28.
 # `join` deg lists with library counts and blast output
 load the `../analyses/08-deseq2/DEGlist_control_v_armdrop.tab`
 ```{r}
-deglist <- read.delim("../analyses/08-deseq2/DEGlist_control_v_armdrop.tab")
+deglist <- read.delim("../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7.tab")
 head(deglist)
 ```
 
@@ -142,6 +142,45 @@ head(blastout)
 ```{r}
 deglistcountblast <- left_join(deglistcount, blastout, by = "gene")
 head(deglistcountblast)
+```
+
+Write out the file:
+```{r}
+#write.table(deglistcountblast, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_genecounts_blast.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+wrote out 20231228
+
+## MAKE HEATMAP
+Load in packages:
+```{r}
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+```
+
+Set heatmap colors:
+```{r}
+heatmapPurpleOrange <- RColorBrewer::brewer.pal(11, "PuOr")
+```
+Set `gene` column as rownames:
+```{r}
+rownames(deglistcount) <- deglistcount$gene #set gene IDs as rownames
+degheatmap <- deglistcount[,-1] #remove redundant column
+head(degheatmap)
+```
+
+Pull out just the sample count data:    
+Pull the columns out in order where controls are first:     
+```{r}
+degheatmap <- select(degheatmap, "PSC.0177", "PSC.0186", "PSC.0202", "PSC.0203", "PSC.0209", "PSC.0219", "PSC.0230", "PSC.0149", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
+head(degheatmap)
+```
+
+Going to remove all rows that have "0" for all samples: 
+```{r}
+nozerodegheatmap <- degheatmap[rowSums(degheatmap[, -1] >0) !=0, ]
+head(nozerodegheatmap)
 ```
 
 

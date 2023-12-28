@@ -50,11 +50,11 @@ PSC.0177	small	                11	healthy	34
 PSC.0186	large	                11	healthy	15
 PSC.0187	small	                11	first_arm_drop	57
 PSC.0188	small	                11	first_arm_drop	38
-PSC.0190	large           	11	first_arm_drop	10
-PSC.0202	large           	12	healthy	4
-PSC.0203	large           	12	healthy	31
-PSC.0209	large           	13	healthy	9
-PSC.0219	small           	14	healthy	63
+PSC.0190	large               	11	first_arm_drop	10
+PSC.0202	large               	12	healthy	4
+PSC.0203	large               	12	healthy	31
+PSC.0209	large               	13	healthy	9
+PSC.0219	small               	14	healthy	63
 PSC.0228	small	                14	first_arm_drop	61
 PSC.0230	small	                15	healthy	65
 PSC.0231	large	                15	first_arm_drop	13
@@ -182,10 +182,94 @@ Going to remove all rows that have "0" for all samples:
 nozerodegheatmap <- degheatmap[rowSums(degheatmap[, -1] >0) !=0, ]
 head(nozerodegheatmap)
 ```
+Should be 7117 rows
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 15, fontsize_row = 12)
+```
+
+Annotate heatmap with healthy or firstarmdrop:
+```{r}
+sample_col <- data.frame(diseasesign = c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop"))
+row.names(sample_col) <-colnames(nozerodegheatmap)
+sample_col
+```
+add annotation for star size:
+```{r}
+sample_col$star.size <- c("small", "large", "large", "large", "large", "small", "small", "large", "large", "small", "small", "large", "small", "large")
+sample_col
+```
+
+specify colors for annotation columns:
+```{r}
+my_colors <- list(
+  treatment = c(control = "cyan3", exposed = "coral3"),
+  star.size = c(large = "#AF2CEC", small = "#2C75EC")
+)
+```
+
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", annotation_colors = my_colors, annotation_col = sample_col, show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 12, fontsize_row = 12)
+```
+
+## Now see if size/age of star has an impact on this:
+Code based on the Multi-factor design section of the manual:        http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs 
+
+```{r}
+colData <- data.frame(condition=factor(c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop")), 
+                             type=factor(rep("paired-end", 14)),
+                             size=factor(c("small", "large", "large", "large", "large", "small", "small", "large", "large", "small", "small", "large", "small", "large")))
+rownames(colData) <- colnames(convad)
+dds <- DESeqDataSetFromMatrix(countData = convad,
+                                     colData = colData, 
+                                     design = ~ condition + size)
+```
+Check levels of size and condition
+```{r}
+levels(dds$size)
+```
+```{r}
+levels(dds$condition)
+```
+The following will pull the results from `size` (large or small) because that is our variable of interest. This tells us how size/age contributes to the infection DEGs
+```{r}
+design(dds) <- formula(~ condition + size)
+dds <- DESeq(dds)
+```
+Access results:
+```{r}
+res <- results(dds)
+head(res)
+```
+
+```{r}
+summary(res)
+```
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+one??
+
+```{r}
+sizeconvad <- res
+# The main plot
+plot(sizeconvad$baseMean, sizeconvad$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main= "Control vs Arm Drop Stars Taking Size into Accoun  (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+sizeconvad.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(sizeconvad.sig$baseMean, sizeconvad.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
 
 
-
-
+```{r}
+#write.table(sizeconvad.sig, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_contrastsize.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+Wrote out table 20231228. Commented out code
 
 
 

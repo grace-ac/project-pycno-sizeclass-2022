@@ -3,3 +3,107 @@ title: "08-deseq2-controlvarmdrop"
 output: html_document
 date: "2023-12-28"
 ---
+Rmd to use `DESeq2` to get differentially expressed genes lists from summmer 2022 samples. Experiment was comparing the response to exposure of SSWD between small (juvenile) and large (adult) _Pycnopodia helianthoides_ and compared to control stars. 
+
+Sample info: 
+https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/data/summer2022_metadata.csv 
+Load packages:    
+installed 2023-12-26 
+```{r}
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+#BiocManager::install("DESeq2")
+```
+
+
+```{r}
+library(DESeq2)
+library(tidyverse)
+library(pheatmap)
+library(RColorBrewer)
+library(data.table)
+```
+
+Read in count matrix created on Raven using: https://github.com/grace-ac/project-pycno-sizeclass-2022/blob/main/code/07-kallisto-summer2022-phelgenome.Rmd 
+
+```{r}
+countmatrix <- read.delim("../analyses/07-kallisto-phelgenome/kallisto_20231204.isoform.counts.matrix", header = TRUE, sep = '\t')
+rownames(countmatrix) <- countmatrix$X
+countmatrix <- countmatrix[,-1]
+head(countmatrix)
+```
+
+Round integers up to hole numbers for further analysis:
+```{r}
+countmatrix <- round(countmatrix, 0)
+head(countmatrix)
+```
+
+# For SICB: Compare Control vs Arm Drop (only looking at libraries from Day 8-15) 
+
+
+coelom_ID	star_size	experiment_day	disease_sign	star_ID
+PSC.0149	large	                8	first_arm_drop	28
+PSC.0174	large	                10	first_arm_drop	30
+PSC.0177	small	                11	healthy	34
+PSC.0186	large	                11	healthy	15
+PSC.0187	small	                11	first_arm_drop	57
+PSC.0188	small	                11	first_arm_drop	38
+PSC.0190	large           	11	first_arm_drop	10
+PSC.0202	large           	12	healthy	4
+PSC.0203	large           	12	healthy	31
+PSC.0209	large           	13	healthy	9
+PSC.0219	small           	14	healthy	63
+PSC.0228	small	                14	first_arm_drop	61
+PSC.0230	small	                15	healthy	65
+PSC.0231	large	                15	first_arm_drop	13
+
+Subset the above libraries:
+```{r}
+#control (con) vs armdrop (ad)
+convad <- select(countmatrix, "PSC.0149", "PSC.0174", "PSC.0177", "PSC.0186", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0202", "PSC.0203", "PSC.0209", "PSC.0219", "PSC.0228", "PSC.0230", "PSC.0231")
+head(convad)
+```
+Get DEGs comparing the two groups - control vs first arm drop. 
+```{r}
+colData <- data.frame(condition=factor(c("firstarmdrop", "firstarmdrop", "healthy", "healthy", "firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "healthy", "healthy", "firstarmdrop", "healthy", "firstarmdrop")), 
+                             type=factor(rep("paired-end", 14)))
+rownames(colData) <- colnames(convad)
+dds <- DESeqDataSetFromMatrix(countData = convad,
+                                     colData = colData, 
+                                     design = ~ condition)
+```
+```{r}
+dds <- DESeq(dds)
+res <- results(dds)
+res <- res[order(rownames(res)), ]
+```
+```{r}
+head(res)
+```
+```{r}
+# Count number of hits with adjusted p-value less then 0.05
+dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
+```
+```{r}
+control_v_armdrop_fig <- res
+# The main plot
+plot(control_v_armdrop_fig$baseMean, control_v_armdrop_fig$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
+     main="SSWD Exposure Status Healthy (Control) vs Exposed (Arm Drop) (pval </= 0.05)",
+     xlab="mean of normalized counts",
+     ylab="Log2 Fold Change")
+# Getting the significant points and plotting them again so they're a different color
+control_v_armdrop_fig.sig <- res[!is.na(res$padj) & res$padj <= 0.05, ]
+points(control_v_armdrop_fig.sig$baseMean, control_v_armdrop_fig.sig$log2FoldChange, pch=20, cex=0.45, col="red")
+# 2 FC lines
+abline(h=c(-1,1), col="blue")
+```
+Write out list of those 6441 DEGs:
+Wrote out 2023-12-28. 
+```{r}
+#write.table(control_v_armdrop_fig.sig, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+
+
+

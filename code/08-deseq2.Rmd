@@ -782,6 +782,37 @@ Write out the file:
 ```
 wrote out 20231227
 
+`join` `../analyses/08-deseq2/DEGlist_firstarmdrop_vs_secondarmdrop_genecounts.tab` with blastoutput:
+
+```{r}
+deglistcount <- read.delim("../analyses/08-deseq2/DEGlist_firstarmdrop_vs_secondarmdrop_genecounts.tab")
+head(deglistcount)
+```
+```{r}
+blastout <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx_sep.tab", header = FALSE)
+head(blastout)
+```
+
+rename the first column "gene":
+```{r}
+cols <- c("gene", "V2", "uniprotID", "geneID", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12", "V13", "V14")
+colnames(blastout) <- cols
+head(blastout)
+```
+
+`join` blastout with deglistcount by gene column:
+`join` the blastout with the deglistcount:
+```{r}
+deglistcountblast <- left_join(deglistcount, blastout, by = "gene")
+head(deglistcountblast)
+```
+write out table:
+write out the blast annotated file:
+```{r}
+#write.table(deglistcountblast, "../analyses/08-deseq2/DEGlist_firstarmdrop_vs_secondarmdrop_genecounts_blast.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+wrote out 20231227
+
 # MAKE HEATMAP
 Load in packages:
 ```{r}

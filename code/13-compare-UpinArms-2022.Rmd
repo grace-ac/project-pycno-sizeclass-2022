@@ -1,0 +1,13 @@
+---
+title: "13-compareUpinArms-2022"
+output: html_document
+date: "2024-01-02"
+---
+Rmd to compare DEGlist from Up in Arms 2015 to Summer 2022 DEG list comparing 7control and 7 exposed arm drop stars. 
+
+Load packages needed:
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+

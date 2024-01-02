@@ -11,3 +11,49 @@ library(tidyverse)
 library(dplyr)
 ```
 
+Read in Up in Arms DEGlist from https://github.com/sr320/eimd-sswd/blob/master/precompiled_wd/Phel_DEG_uniprot.tab. I downloaded the file and put in the data directory for this repository. 
+
+```{r}
+uiadeg <- read.delim("../data/Phel_DEG_uniprot_UpinArms.tab", sep = '\t', header = TRUE)
+head(uiadeg)
+```
+
+Pull out just the first two columns:
+```{r}
+uiatuni <- select(uiadeg, "transcript_ID", "uniprotID")
+head(uiatuni)
+```
+
+Read in the DEGlist with uniprot from the summer 2022 deseq2 comparison of 7controls vs 7 exposed arm drop stars:
+```{r}
+cvad <- read.delim("../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_genecounts_blast.tab")
+head(cvad)
+```
+
+`join` this list with the uiatuni list based on the column "uniprotID"
+```{r}
+cvaduia <- left_join(cvad, uiatuni, by = "uniprotID")
+head(cvaduia)
+```
+
+Remove rows with no input in uniprotID column:
+newdf <- df[!is.na(df$name),]
+```{r}
+cvaduiashort <- cvaduia[!is.na(cvaduia$uniprotID),]
+head(cvaduiashort)
+```
+
+Remove rows that don't have a Up in Arms transcript ID:
+```{r}
+cvaduiashorter <- cvaduiashort[!is.na(cvaduiashort$transcript_ID),]
+head(cvaduiashorter)
+```
+
+It is now 1,727 rows long. 
+
+Read this file into a analyses/13-compare-UpinArms:
+```{r}
+#write.table(cvaduiashorter, "../analyses/13-compare-UpinArms/DEGlist_matches_upinarms_summer20227controlV7armdrop.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+
+Write out 01/01/2024. 

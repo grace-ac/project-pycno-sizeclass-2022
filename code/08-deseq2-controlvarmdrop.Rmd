@@ -67,7 +67,7 @@ head(convad)
 ```
 Get DEGs comparing the two groups - control vs first arm drop. 
 ```{r}
-colData <- data.frame(condition=factor(c("firstarmdrop", "firstarmdrop", "healthy", "healthy", "firstarmdrop", "firstarmdrop", "firstarmdrop", "healthy", "healthy", "healthy", "healthy", "firstarmdrop", "healthy", "firstarmdrop")), 
+colData <- data.frame(condition=factor(c("exposed", "exposed", "healthy", "healthy", "exposed", "exposed", "exposed", "healthy", "healthy", "healthy", "healthy", "exposed", "healthy", "exposed")), 
                              type=factor(rep("paired-end", 14)))
 rownames(colData) <- colnames(convad)
 dds <- DESeqDataSetFromMatrix(countData = convad,
@@ -82,6 +82,19 @@ res <- res[order(rownames(res)), ]
 ```{r}
 head(res)
 ```
+From [Bioconductor `DESeq2` Vignette](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html):     
+```{r}
+vsd <- vst(dds, blind=FALSE)
+rld <- rlog(dds, blind=FALSE)
+head(assay(vsd), 3)
+```
+```{r}
+plot <- plotPCA(vsd, intgroup=c("condition", "type"))
+nudge <- position_nudge(y = 4)
+plot + geom_text(aes(label = name), position = nudge)
+```
+
+
 ```{r}
 # Count number of hits with adjusted p-value less then 0.05
 dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
@@ -90,7 +103,7 @@ dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
 control_v_armdrop_fig <- res
 # The main plot
 plot(control_v_armdrop_fig$baseMean, control_v_armdrop_fig$log2FoldChange, pch=20, cex=0.45, ylim=c(-15, 15), log="x", col="darkgray",
-     main="SSWD Exposure Status Healthy (Control) vs Exposed (Arm Drop) (pval </= 0.05)",
+     main="Control vs Exposed (pval </= 0.05)",
      xlab="mean of normalized counts",
      ylab="Log2 Fold Change")
 # Getting the significant points and plotting them again so they're a different color
@@ -99,7 +112,7 @@ points(control_v_armdrop_fig.sig$baseMean, control_v_armdrop_fig.sig$log2FoldCha
 # 2 FC lines
 abline(h=c(-1,1), col="blue")
 ```
-Write out list of those 6441 DEGs:
+Write out list of those 7117 DEGs:
 Wrote out 2023-12-28. 
 ```{r}
 #write.table(control_v_armdrop_fig.sig, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
@@ -126,6 +139,12 @@ head(deglist)
 deglistcount <- left_join(deglist, convadrownames, by = "gene")
 head(deglistcount)
 ```
+write out deglist count:
+```{r}
+#write.table(deglistcount, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_genecounts.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+write out 20240101. 
+
 read in blast output
 ```{r}
 blastout <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx_sep.tab", header = FALSE)
@@ -190,7 +209,7 @@ pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FAL
 
 Annotate heatmap with healthy or firstarmdrop:
 ```{r}
-sample_col <- data.frame(diseasesign = c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop"))
+sample_col <- data.frame(treatment = c("control", "control", "control", "control", "control", "control", "control", "exposed", "exposed", "exposed", "exposed", "exposed", "exposed", "exposed"))
 row.names(sample_col) <-colnames(nozerodegheatmap)
 sample_col
 ```
@@ -203,8 +222,8 @@ sample_col
 specify colors for annotation columns:
 ```{r}
 my_colors <- list(
-  treatment = c(control = "cyan3", exposed = "coral3"),
-  star.size = c(large = "#AF2CEC", small = "#2C75EC")
+  treatment = c(control = "cyan3", exposed = "coral3")
+  #star.size = c(large = "#AF2CEC", small = "#2C75EC")
 )
 ```
 

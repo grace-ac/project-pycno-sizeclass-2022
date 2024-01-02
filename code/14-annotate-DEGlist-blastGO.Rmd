@@ -1,0 +1,44 @@
+---
+title: "14-annotate-deglist-blastGO"
+output: html_document
+date: "2024-01-02"
+---
+Rmd to annotate DEGlist from SICB analyses with the BLAST and GO. 
+
+```{r}
+deglist <- read.delim("../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7.tab", sep = '\t')
+head(deglist)
+```
+
+Make rownames into column called "geneID"
+```{r}
+library(tibble)
+deglist <- tibble::rownames_to_column(deglist, "geneID")
+head(deglist)
+```
+
+
+```{r}
+blastGOslim <- read.delim("../analyses/14-annotate-deglist-blastGO/Blastquery-GOslim.tab", sep = '\t', header = FALSE)
+head(blastGOslim)
+```
+Set column names:
+```{r}
+blastGOslim <- setNames(blastGOslim, c("geneID", "GOID", "Biological_Process", "P"))
+head(blastGOslim)
+```
+
+`join` the two files based on column "geneID"
+```{r}
+deglistblastGOslim <- left_join(deglist, blastGOslim, by = "geneID")
+head(deglistblastGOslim)
+```
+
+write out file:
+```{r}
+#write.table(deglistblastGOslim, "../analyses/14-annotate-deglist-blastGO/DEGlist_7controlV7armdrop_blastGOslim.tab", sep = '\t', row.names = FALSE)
+```
+
+wrote out 2024-01-02
+
+

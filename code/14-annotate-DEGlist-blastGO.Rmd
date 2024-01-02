@@ -36,7 +36,7 @@ head(deglistblastGOslim)
 
 write out file:
 ```{r}
-#write.table(deglistblastGOslim, "../analyses/14-annotate-deglist-blastGO/DEGlist_7controlV7armdrop_blastGOslim.tab", sep = '\t', row.names = FALSE)
+#write.table(deglistblastGOslim, "../analyses/14-annotate-deglist-blastGO/DEGlist_7controlV7armdrop_blastGOslim.tab", sep = '\t', row.names = FALSE, quote = FALSE)
 ```
 
 wrote out 2024-01-02

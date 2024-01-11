@@ -359,8 +359,11 @@ permanova.convad <- adonis2(scale(vsd.transpose.df[c(2:26582)]) %>%
                        replace(is.na(.), 0) ~ condition, data = vsd.transpose.df, method = "eu")  
 permanova.convad #Significant influence of all factors
 ```
-
-
+```{r}
+#broom::tidy(permanova.convad) %>%
+#  write.csv("../analyses/08-deseq2/7controlV7armdrop_withAge_Permanova_results.csv", quote = FALSE) #Save PERMANOVA output
+```
+write out 20240111.
 ```{r}
 # Count number of hits with adjusted p-value less then 0.05
 dim(res[!is.na(res$padj) & res$padj <= 0.05, ])

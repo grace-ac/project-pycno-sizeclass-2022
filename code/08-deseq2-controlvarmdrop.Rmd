@@ -97,7 +97,7 @@ rld <- rlog(dds, blind=FALSE)
 head(assay(vsd), 3)
 ```
 ```{r}
-plot <- plotPCA(vsd, intgroup=c("condition", "type"))
+plot <- plotPCA(vsd, intgroup=c("condition"))
 nudge <- position_nudge(y = 4)
 plot + geom_text(aes(label = name), position = nudge)
 ```

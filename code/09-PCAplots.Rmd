@@ -15,7 +15,7 @@ sessionInfo()
 ```{r}
 #commented out chunk 20231219 bc have run already
 #if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+#    install.packages("BiocManager")
 
 #BiocManager::install("DESeq2")
 
@@ -85,6 +85,48 @@ plot + geom_text(aes(label = name), position = nudge)
 ```
 
 That's kind of messy and confusing... 
+
+# PCA of control vs first arm drop stars, and grouped by age class 
+Stars:
+| Library  | star_age | disease_sign | experiment_day | treatment |
+|----------|----------|--------------|----------------|-----------|
+| PSC.0177 | juvenile | healthy      | 11             | control   |
+| PSC.0186 |    adult | healthy      | 11             | control   |
+| PSC.0202 |    adult | healthy      | 12             | control   |
+| PSC.0203 |    adult | healthy      | 12             | control   |
+| PSC.0209 |    adult | healthy      | 13             | control   |
+| PSC.0219 | juvenile | healthy      | 14             | control   |
+| PSC.0230 | juvenile | healthy      | 15             | control   |
+| PSC.0149 |    adult | arm_drop     | 8              | exposed   |
+| PSC.0174 |    adult | arm_drop     | 10             | exposed   |
+| PSC.0187 | juvenile | arm_drop     | 11             | exposed   |
+| PSC.0188 | juvenile | arm_drop     | 11             | exposed   |
+| PSC.0190 |    adult | arm_drop     | 11             | exposed   |
+| PSC.0228 | juvenile | arm_drop     | 14             | exposed   |
+| PSC.0231 |    adult | arm_drop     | 15             | exposed   |
+
+Make a subset countmatrix of just those libraries: 
+```{r}
+#advcmatrix = ArmDrop Vs Control Matrix
+advcmatrix <- select(countmatrix, "PSC.0177", "PSC.0186", "PSC.0202", "PSC.0203", "PSC.0209", "PSC.0219", "PSC.0230", "PSC.0149", "PSC.0174", "PSC.0187", "PSC.0188", "PSC.0190", "PSC.0228", "PSC.0231")
+head(advcmatrix)
+```
+26581 rows and 14 columns
+
+write out table
+```{r}
+#write.table(advcmatrix, "../analyses/07-kallisto-phelgenome/control_vs_firstarmdrop_counts_rounded.tsv", sep = "\t", row.names = TRUE, quote = FALSE)
+```
+Wrote out 20240111. 
+
+Read in the rounded count matrix for this comparison:
+```{r}
+advccounts <- read.delim("../analyses/07-kallisto-phelgenome/control_vs_firstarmdrop_counts_rounded.tsv")
+head(advccounts)
+```
+
+
+
 
 # Adonis PCA to see if individual treatment and days since exposure interacts with disease sign 
 
@@ -222,8 +264,8 @@ name the first column "Library"
 
 ```{r}
 #armdrop.pca <- prcomp(adcmatrix, 
-                   center = TRUE, 
-                   scale. = TRUE) 
+#                   center = TRUE, 
+#                   scale. = TRUE) 
   
 # summary of the  
 # prcomp object 
@@ -360,7 +402,8 @@ comment out 2023-12-21 because has been installed
 #BiocManager::install("org.Hs.eg.db")
 ```
 
-# PCA for SICB:
+# PCA for TNC meeting update:
 7 control vs 7 arm drop:
+Want to compare based on disease sign and age class. 
 
 

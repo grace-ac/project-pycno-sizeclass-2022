@@ -316,6 +316,51 @@ head(res)
 ```{r}
 summary(res)
 ```
+make a PCA:
+```{r}
+vsd <- vst(dds, blind=FALSE)
+rld <- rlog(dds, blind=FALSE)
+head(assay(vsd), 3)
+```
+
+```{r}
+plot <- plotPCA(vsd, intgroup=c("condition", "size"))
+nudge <- position_nudge(y = 4)
+plot + geom_text(aes(label = name), position = nudge)
+```
+
+run PERMANOVA:
+transpose the vsd data so that the genes are the columns and the rows (n=14) are the libraries 
+```{r}
+vsd.transpose <- t(assay(vsd))
+head(vsd.transpose)
+```
+
+vsd.transpose is currently a matrix, but adonis2 needs it to be a data frame. Make it into a dataframe:
+```{r}
+vsd.transpose.df=as.data.frame(vsd.transpose)
+head(vsd.transpose.df)
+```
+
+make rownames into a column called LibraryID:
+```{r}
+library(tibble)
+vsd.transpose.df <- tibble::rownames_to_column(vsd.transpose.df, "LibraryID")
+head(vsd.transpose.df)
+```
+
+Add columns to dataframe to explain the libraries:
+```{r}
+vsd.transpose.df$condition <- c("exposed", "exposed", "healthy", "healthy", "exposed", "exposed", "exposed", "healthy", "healthy", "healthy", "healthy", "exposed", "healthy", "exposed")
+head(vsd.transpose.df)
+```
+```{r}
+permanova.convad <- adonis2(scale(vsd.transpose.df[c(2:26582)]) %>%
+                       replace(is.na(.), 0) ~ condition, data = vsd.transpose.df, method = "eu")  
+permanova.convad #Significant influence of all factors
+```
+
+
 ```{r}
 # Count number of hits with adjusted p-value less then 0.05
 dim(res[!is.na(res$padj) & res$padj <= 0.05, ])

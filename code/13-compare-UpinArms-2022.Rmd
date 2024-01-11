@@ -57,3 +57,55 @@ Read this file into a analyses/13-compare-UpinArms:
 ```
 
 Write out 01/01/2024. 
+
+
+## Combine this table with the uniprot-SP-GO table to get Go IDs:
+
+read in table: 
+```{r}
+combodeglist <- read.delim("../analyses/13-compare-UpinArms/uniqueDEGs_overlap-UpinArms_Summ22_7controlV7armdrop.txt")
+head(combodeglist)
+```
+
+read in uniprot-SP-GO:
+Note: I copied it into code directory from another directory I had it in. 
+
+```{R}
+uniprotSPGO <- read.delim("../code/uniprot-SP-GO.sorted", header = FALSE)
+head(uniprotSPGO)
+```
+
+#joining blast with uniprot annoation file and reducing to three columns UniprotID, Query, All GO terms
+```{bash}
+join -t $'\t' \
+combodeglist \
+uniprot-SP-GO.sorted \
+| cut -f1,2,14 \
+> combodeglist-annot.tab
+```
+# `join` `../analyses/14-annotate-deglist-blastGO/DEGlist_7controlV7armdrop_blastGOslim_count_uniprot.tab` with `../analyses/13-compare-UpinArms/uniqueDEGs_overlap_UpinArms_Summ22_7controlV7armdrop.txt`
+
+```{r}
+deglistblastuniprot <- read.delim("../analyses/14-annotate-deglist-blastGO/DEGlist_7controlV7armdrop_blastGOslim_count_uniprot.tab", sep = '\t')
+head(deglistblastuniprot)
+```
+
+```{r}
+uniqDEGsUp <- read.delim("../analyses/13-compare-UpinArms/uniqueDEGs_overlap-UpinArms_Summ22_7controlV7armdrop.txt", sep = '\t')
+head(uniqDEGsUp)
+```
+
+`join` by "geneID"
+```{r}
+deglistblastuniprotUp <- left_join(deglistblastuniprot, uniqDEGsUp, by = "geneID")
+head(deglistblastuniprotUp)
+```
+
+write out
+```{r}
+#write.table(deglistblastuniprotUp, "../analyses/13-compare-UpinArms/DEGlist_matches_upinarms_summer20227controlV7armdrop_DEGlistBLastuniprot.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+wrote out 2024-01-02
+
+
+

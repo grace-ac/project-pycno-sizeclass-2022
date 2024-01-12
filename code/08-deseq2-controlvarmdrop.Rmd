@@ -415,6 +415,13 @@ head(deglist)
 deglistcount <- left_join(deglist, convadrownames, by = "gene")
 head(deglistcount)
 ```
+write out genelistcount:
+```{r}
+#write.table(deglistcount, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_contrastsize_genecounts.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+```
+wrote out 20240112
+
+
 `join` with blastoutput
 ```{r}
 blastout <- read.delim("../analyses/10-BLAST/summer2022-uniprot_blastx_sep.tab", header = FALSE)

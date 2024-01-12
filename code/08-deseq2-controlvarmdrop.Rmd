@@ -429,16 +429,16 @@ head(blastout)
 
 `join` with deglistcount
 ```{r}
-deglistcountblast <- left_join(deglist, blastout, by = "gene")
+deglistcountblast <- left_join(deglistcount, blastout, by = "gene")
 head(deglistcountblast)
 ```
 
 write out file:
 write out the blast annotated file:
 ```{r}
-#write.table(deglistcountblast, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_contrastsize_genecounts_blast.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+write.table(deglistcountblast, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_contrastsize_genecounts_blast.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
 ```
-wrote out 20231228
+wrote out 20240112
 
 # MAKE HEATMAP
 Load in packages:

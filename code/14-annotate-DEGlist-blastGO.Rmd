@@ -150,4 +150,26 @@ write out:
 
 wrote out 2024-01-12
 
+annotate with uniprot-SP-GO:
+```{r}
+uniprot <- read.delim("../analyses/14-annotate-deglist-blastGO/uniprot-SP-GO.sorted", header = FALSE)
+head(uniprot)
+```
 
+ rename first column as uniprotID:
+```{r}
+uniprot <- setNames(uniprot, c("uniprotID", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10", "V11", "V12"))
+head(uniprot)
+``` 
+
+left join with degblastcountGOslim
+```{r}
+degblastcountGOslimuniprot <- left_join(degblastcountGOslim, uniprot, by = "uniprotID")
+head(degblastcountGOslimuniprot)
+```
+
+```{r}
+#write.table(degblastcountGOslimuniprot, "../analyses/14-annotate-deglist-blastGO/DEGlist_7controlV7armdrop_contrastsize_blastGOslim_count_uniprot.tab", sep = '\t', row.names = FALSE, quote = FALSE)
+```
+
+wrote out 2024-01-12

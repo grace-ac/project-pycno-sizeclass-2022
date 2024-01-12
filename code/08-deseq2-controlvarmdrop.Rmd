@@ -436,7 +436,7 @@ head(deglistcountblast)
 write out file:
 write out the blast annotated file:
 ```{r}
-write.table(deglistcountblast, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_contrastsize_genecounts_blast.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
+#write.table(deglistcountblast, "../analyses/08-deseq2/DEGlist_control_v_armdrop_7x7_contrastsize_genecounts_blast.tab", sep = "\t", row.names = T, quote = FALSE, col.names = TRUE)
 ```
 wrote out 20240112
 
@@ -477,11 +477,30 @@ head(nozerodegheatmap)
 pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 15, fontsize_row = 12)
 ```
 
+Annotate heatmap with control or exposed:
+```{r}
+sample_col <- data.frame(treatment = c("control", "control", "control", "control", "control", "control", "control", "exposed", "exposed", "exposed", "exposed", "exposed", "exposed", "exposed"))
+row.names(sample_col) <-colnames(nozerodegheatmap)
+sample_col
+```
+
+add annotation for star age:
+```{r}
+sample_col$star.size <- c("juvenile", "adult", "adult", "adult", "adult", "juvenile", "juvenile", "adult", "adult", "juvenile", "juvenile", "adult", "juvenile", "adult")
+sample_col
+```
+specify colors for annotation columns:
+```{r}
+my_colors <- list(
+  treatment = c(control = "#15BED2", exposed = "#E33607"),
+  star.size = c(adult = "#AF2CEC", juvenile = "#18E307")
+)
+```
 
 
-
-
-
+```{r}
+pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", annotation_colors = my_colors, annotation_col = sample_col, show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 12, fontsize_row = 12)
+```
 
 
 

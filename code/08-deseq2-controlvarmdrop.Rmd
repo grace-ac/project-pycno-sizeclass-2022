@@ -75,7 +75,7 @@ head(convad)
 ```
 Get DEGs comparing the two groups - control vs first arm drop. 
 ```{r}
-colData <- data.frame(condition=factor(c("exposed", "exposed", "healthy", "healthy", "exposed", "exposed", "exposed", "healthy", "healthy", "healthy", "healthy", "exposed", "healthy", "exposed")), 
+colData <- data.frame(condition=factor(c("exposed", "exposed", "control", "control", "exposed", "exposed", "exposed", "control", "control", "control", "control", "exposed", "control", "exposed")), 
                              type=factor(rep("paired-end", 14)))
 rownames(colData) <- colnames(convad)
 dds <- DESeqDataSetFromMatrix(countData = convad,
@@ -130,7 +130,7 @@ head(vsd.transpose.df)
 
 Add columns to dataframe to explain the libraries:
 ```{r}
-vsd.transpose.df$condition <- c("exposed", "exposed", "healthy", "healthy", "exposed", "exposed", "exposed", "healthy", "healthy", "healthy", "healthy", "exposed", "healthy", "exposed")
+vsd.transpose.df$condition <- c("exposed", "exposed", "control", "control", "exposed", "exposed", "exposed", "control", "control", "control", "control", "exposed", "control", "exposed")
 head(vsd.transpose.df)
 ```
 
@@ -283,13 +283,15 @@ my_colors <- list(
 pheatmap(nozerodegheatmap, scale = "row", cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_rows = "euclidean", clustering_method = "average", annotation_colors = my_colors, annotation_col = sample_col, show_rownames = FALSE, show_colnames = TRUE, treeheight_col = 80, legend = TRUE, color = heatmapPurpleOrange, fontsize_col = 12, fontsize_row = 12)
 ```
 
-## Now see if size/age of star has an impact on this:
+# Now see if size/age of star has an impact on this:
 Code based on the Multi-factor design section of the manual:        http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs 
 
+Clear environment, and re-read in the count matrix and pull out the 14 libraries
+
 ```{r}
-colData <- data.frame(condition=factor(c("control", "control", "control", "control", "control", "control", "control", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop", "firstarmdrop")), 
+colData <- data.frame(condition=factor(c("exposed", "exposed", "control", "control", "exposed", "exposed", "exposed", "control", "control", "control", "control", "exposed", "control", "exposed")), 
                              type=factor(rep("paired-end", 14)),
-                             size=factor(c("small", "large", "large", "large", "large", "small", "small", "large", "large", "small", "small", "large", "small", "large")))
+                             size=factor(c("large", "large", "small", "large", "small", "small", "large", "large", "large", "large", "small", "small", "small", "large")))
 rownames(colData) <- colnames(convad)
 dds <- DESeqDataSetFromMatrix(countData = convad,
                                      colData = colData, 
@@ -351,7 +353,7 @@ head(vsd.transpose.df)
 
 Add columns to dataframe to explain the libraries:
 ```{r}
-vsd.transpose.df$condition <- c("exposed", "exposed", "healthy", "healthy", "exposed", "exposed", "exposed", "healthy", "healthy", "healthy", "healthy", "exposed", "healthy", "exposed")
+vsd.transpose.df$condition <- c("exposed", "exposed", "control", "control", "exposed", "exposed", "exposed", "control", "control", "control", "control", "exposed", "control", "exposed")
 head(vsd.transpose.df)
 ```
 ```{r}
@@ -363,12 +365,12 @@ permanova.convad #Significant influence of all factors
 #broom::tidy(permanova.convad) %>%
 #  write.csv("../analyses/08-deseq2/7controlV7armdrop_withAge_Permanova_results.csv", quote = FALSE) #Save PERMANOVA output
 ```
-write out 20240111.
+write out 20240112.
 ```{r}
 # Count number of hits with adjusted p-value less then 0.05
 dim(res[!is.na(res$padj) & res$padj <= 0.05, ])
 ```
-one??
+145!!!!
 
 ```{r}
 sizeconvad <- res
